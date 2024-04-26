@@ -40,7 +40,6 @@ import top.theillusivec4.curios.common.network.client.CPacketOpenVanilla;
 public class CuriosButton extends ImageButton {
 
   private final AbstractContainerScreen<?> parentGui;
-  private int panelWidth;
 
   CuriosButton(AbstractContainerScreen<?> parentGui, int xIn, int yIn, int widthIn, int heightIn,
                int textureOffsetX, int textureOffsetY, int yDiffText, ResourceLocation resource) {
@@ -81,7 +80,7 @@ public class CuriosButton extends ImageButton {
                            float partialTicks) {
     Tuple<Integer, Integer> offsets =
         CuriosScreen.getButtonOffset(parentGui instanceof CreativeModeInventoryScreen);
-    this.setX(parentGui.getGuiLeft() + offsets.getA() + this.panelWidth);
+    this.setX(parentGui.getGuiLeft() + offsets.getA());
     int yOffset = parentGui instanceof CreativeModeInventoryScreen ? 68 : 83;
     this.setY(parentGui.getGuiTop() + offsets.getB() + yOffset);
 
@@ -94,9 +93,5 @@ public class CuriosButton extends ImageButton {
       }
     }
     super.renderWidget(guiGraphics, mouseX, mouseY, partialTicks);
-  }
-
-  public void setPanelWidth(int panelWidth) {
-    this.panelWidth = panelWidth;
   }
 }

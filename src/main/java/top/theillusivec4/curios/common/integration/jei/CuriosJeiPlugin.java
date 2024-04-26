@@ -26,6 +26,7 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 import net.minecraft.resources.ResourceLocation;
 import top.theillusivec4.curios.Curios;
 import top.theillusivec4.curios.client.gui.CuriosScreen;
+import top.theillusivec4.curios.client.gui.CuriosScreenV2;
 
 @JeiPlugin
 public class CuriosJeiPlugin implements IModPlugin {
@@ -39,5 +40,6 @@ public class CuriosJeiPlugin implements IModPlugin {
   @Override
   public void registerGuiHandlers(IGuiHandlerRegistration registration) {
     registration.addGuiContainerHandler(CuriosScreen.class, new CuriosContainerHandler());
+    registration.addGuiContainerHandler(CuriosScreenV2.class, new CuriosContainerV2Handler());
   }
 }

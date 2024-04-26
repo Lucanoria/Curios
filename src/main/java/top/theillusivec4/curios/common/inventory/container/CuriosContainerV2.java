@@ -102,18 +102,18 @@ public class CuriosContainerV2 extends CuriosContainer {
       this.panelWidth = 14 + 18 * columns;
     }
     this.addSlot(
-        new ResultSlot(player, this.craftMatrix, this.craftResult, 0, 154 + panelWidth, 28));
+        new ResultSlot(player, this.craftMatrix, this.craftResult, 0, 154, 28));
 
     for (int i = 0; i < 2; ++i) {
 
       for (int j = 0; j < 2; ++j) {
-        this.addSlot(new Slot(this.craftMatrix, j + i * 2, 98 + j * 18 + panelWidth, 18 + i * 18));
+        this.addSlot(new Slot(this.craftMatrix, j + i * 2, 98 + j * 18, 18 + i * 18));
       }
     }
 
     for (int k = 0; k < 4; ++k) {
       final EquipmentSlot equipmentslottype = VALID_EQUIPMENT_SLOTS[k];
-      this.addSlot(new Slot(player.getInventory(), 36 + (3 - k), 8 + panelWidth, 8 + k * 18) {
+      this.addSlot(new Slot(player.getInventory(), 36 + (3 - k), 8, 8 + k * 18) {
         @Override
         public void set(@Nonnull ItemStack stack) {
           ItemStack itemstack = this.getItem();
@@ -152,15 +152,14 @@ public class CuriosContainerV2 extends CuriosContainer {
 
       for (int j1 = 0; j1 < 9; ++j1) {
         this.addSlot(
-            new Slot(player.getInventory(), j1 + (l + 1) * 9, 8 + j1 * 18 + panelWidth,
-                84 + l * 18));
+            new Slot(player.getInventory(), j1 + (l + 1) * 9, 8 + j1 * 18, 84 + l * 18));
       }
     }
 
     for (int i1 = 0; i1 < 9; ++i1) {
-      this.addSlot(new Slot(player.getInventory(), i1, 8 + i1 * 18 + panelWidth, 142));
+      this.addSlot(new Slot(player.getInventory(), i1, 8 + i1 * 18, 142));
     }
-    this.addSlot(new Slot(player.getInventory(), 40, 77 + panelWidth, 62) {
+    this.addSlot(new Slot(player.getInventory(), 40, 77, 62) {
       @OnlyIn(Dist.CLIENT)
       @Override
       public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
@@ -210,13 +209,13 @@ public class CuriosContainerV2 extends CuriosContainer {
               if (isCosmetic) {
                 this.addSlot(
                     new CurioSlot(this.player, stackHandler, i, identifier,
-                        (currentColumn - 1) * 18 + 7,
+                        (currentColumn - 1) * 18 + 7 - panelWidth,
                         yOffset + (currentRow - 1) * 18, stacksHandler.getRenders(),
                         stacksHandler.canToggleRendering(), true, true));
               } else {
                 this.addSlot(
                     new CurioSlot(this.player, stackHandler, i, identifier,
-                        (currentColumn - 1) * 18 + 7,
+                        (currentColumn - 1) * 18 + 7 - panelWidth,
                         yOffset + (currentRow - 1) * 18, stacksHandler.getRenders(),
                         stacksHandler.canToggleRendering(), false, false));
               }
@@ -238,13 +237,13 @@ public class CuriosContainerV2 extends CuriosContainer {
               if (isCosmetic) {
                 this.proxySlots.add(new ProxySlot(currentPage,
                     new CurioSlot(this.player, stackHandler, i, identifier,
-                        (currentColumn - 1) * 18 + 7, yOffset + (currentRow - 1) * 18,
+                        (currentColumn - 1) * 18 + 7 - panelWidth, yOffset + (currentRow - 1) * 18,
                         stacksHandler.getRenders(), stacksHandler.canToggleRendering(), true,
                         true)));
               } else {
                 this.proxySlots.add(new ProxySlot(currentPage,
                     new CurioSlot(this.player, stackHandler, i, identifier,
-                        (currentColumn - 1) * 18 + 7, yOffset + (currentRow - 1) * 18,
+                        (currentColumn - 1) * 18 + 7 - panelWidth, yOffset + (currentRow - 1) * 18,
                         stacksHandler.getRenders(), stacksHandler.canToggleRendering(), false,
                         false)));
               }

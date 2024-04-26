@@ -34,10 +34,10 @@ public class PageButton extends Button {
     int yText = 25;
 
     if (type == Type.NEXT) {
-      this.setX(this.parentGui.getGuiLeft() + this.parentGui.panelWidth - 28 + 11);
+      this.setX(this.parentGui.getGuiLeft() - 17);
       this.active = this.parentGui.getMenu().currentPage + 1 < this.parentGui.getMenu().totalPages;
     } else {
-      this.setX(this.parentGui.getGuiLeft() + this.parentGui.panelWidth - 28);
+      this.setX(this.parentGui.getGuiLeft() - 28);
       this.active = this.parentGui.getMenu().currentPage > 0;
     }
 

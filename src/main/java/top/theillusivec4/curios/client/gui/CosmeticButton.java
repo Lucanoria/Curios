@@ -42,7 +42,7 @@ public class CosmeticButton extends ImageButton {
     if (this.isHoveredOrFocused()) {
       yTex = 17;
     }
-    this.setX(this.parentGui.getGuiLeft() + this.parentGui.panelWidth - 27);
+    this.setX(this.parentGui.getGuiLeft() - 27);
     this.setY(this.parentGui.getGuiTop() - 18);
     guiGraphics.blit(this.resourceLocation, this.getX(), this.getY(), xTex, yTex, this.width,
         this.height);
