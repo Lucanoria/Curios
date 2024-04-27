@@ -1,6 +1,7 @@
 package top.theillusivec4.curios.mixin.core;
 
 import com.google.common.collect.Multimap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -124,23 +125,29 @@ public class MixinCuriosApi {
   }
 
   @Inject(at = @At("HEAD"), method = "registerCurioPredicate", cancellable = true)
-  private static void curios$registerSlotResultPredicate(ResourceLocation resourceLocation,
-                                                         Predicate<SlotResult> validator,
-                                                         CallbackInfo ci) {
+  private static void curios$registerCurioPredicate(ResourceLocation resourceLocation,
+                                                    Predicate<SlotResult> validator,
+                                                    CallbackInfo ci) {
     CuriosImplMixinHooks.registerCurioPredicate(resourceLocation, validator);
     ci.cancel();
   }
 
   @Inject(at = @At("HEAD"), method = "getCurioPredicate", cancellable = true)
-  private static void curios$getSlotResultPredicate(ResourceLocation resourceLocation,
-                                                    CallbackInfoReturnable<Optional<Predicate<SlotResult>>> ci) {
+  private static void curios$getCurioPredicate(ResourceLocation resourceLocation,
+                                               CallbackInfoReturnable<Optional<Predicate<SlotResult>>> ci) {
     ci.setReturnValue(CuriosImplMixinHooks.getCurioPredicate(resourceLocation));
   }
 
+  @Inject(at = @At("HEAD"), method = "getCurioPredicates", cancellable = true)
+  private static void curios$getCurioPredicates(
+      CallbackInfoReturnable<Map<ResourceLocation, Predicate<SlotResult>>> ci) {
+    ci.setReturnValue(CuriosImplMixinHooks.getCurioPredicates());
+  }
+
   @Inject(at = @At("HEAD"), method = "testCurioPredicates", cancellable = true)
-  private static void curios$evaluateSlotResultPredicates(Set<ResourceLocation> predicates,
-                                                          SlotResult slotResult,
-                                                          CallbackInfoReturnable<Boolean> ci) {
+  private static void curios$testCurioPredicates(Set<ResourceLocation> predicates,
+                                                 SlotResult slotResult,
+                                                 CallbackInfoReturnable<Boolean> ci) {
     ci.setReturnValue(CuriosImplMixinHooks.testCurioPredicates(predicates, slotResult));
   }
 

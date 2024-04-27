@@ -1,6 +1,7 @@
 package top.theillusivec4.curios.mixin;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.HashMap;
@@ -121,8 +122,39 @@ public class CuriosImplMixinHooks {
       map = getItemStackSlots(stack, FMLLoader.getDist() == Dist.CLIENT);
     }
     Set<String> slots = map.keySet();
-    return (!slots.isEmpty() && id.equals("curio")) || slots.contains(id) ||
-        slots.contains("curio");
+
+    if (!slots.isEmpty()) {
+      return id.equals("curio") || slots.contains(id) || slots.contains("curio");
+    } else if (id.equals("curio")) {
+      // If there are no slots available to confirm validity for the generic curio slot,
+      // perform fallback checks
+
+      // tags
+      if (stack.getTags()
+          .anyMatch(tagKey -> tagKey.location().getNamespace().equals(CuriosApi.MODID))) {
+        return true;
+      }
+
+      // predicates
+      Map<String, ISlotType> allSlots = CuriosApi.getSlots(false);
+      SlotResult slotResult = new SlotResult(slotContext, stack);
+
+      for (Map.Entry<String, ISlotType> entry : allSlots.entrySet()) {
+        ISlotType slotType = entry.getValue();
+
+        for (ResourceLocation validator : slotType.getValidators()) {
+
+          if (CuriosApi.getCurioPredicate(validator).map(val -> val.test(slotResult))
+              .orElse(false)) {
+            return true;
+          }
+        }
+      }
+
+      // capability
+      return CuriosApi.getCurio(stack).isPresent();
+    }
+    return false;
   }
 
   public static Multimap<Attribute, AttributeModifier> getAttributeModifiers(
@@ -255,6 +287,10 @@ public class CuriosImplMixinHooks {
   public static Optional<Predicate<SlotResult>> getCurioPredicate(
       ResourceLocation resourceLocation) {
     return Optional.ofNullable(SLOT_RESULT_PREDICATES.get(resourceLocation));
+  }
+
+  public static Map<ResourceLocation, Predicate<SlotResult>> getCurioPredicates() {
+    return ImmutableMap.copyOf(SLOT_RESULT_PREDICATES);
   }
 
   public static boolean testCurioPredicates(Set<ResourceLocation> predicates,
