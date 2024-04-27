@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 Prior to version 5.2.0, this projected used [Forge Recommended Versioning](https://mcforge.readthedocs.io/en/latest/conventions/versioning/).
 
+## [5.9.0+1.20.1] - 2024.04.27
+### Added
+- Added `enableLegacyMenu` configuration option to `curios-server.toml` to opt-out from the new screen to the old screen
+- [API] Added `CuriosApi#getCurioPredicates`
+### Changed
+- Changed default Curios GUI to the new interface introduced in 5.8.0
+- New interface no longer shifts the screen to the right
+- Scrolling through pages in the new interface is twice as fast
+- Lowered the maximum value of `maxSlotsPerPage` configuration option from 64 to 48
+### Fixed
+- Fixed generic curio slots from failing validation checks when only those slots exist on an entity [#402](https://github.com/TheIllusiveC4/Curios/issues/402)
+### Removed
+- Removed `enableExperimentalMenu` configuration option
+
 ## [5.8.1+1.20.1] - 2024.04.15
 ### Fixed
 - Fixed NPE crash
