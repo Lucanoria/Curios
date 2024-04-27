@@ -62,7 +62,7 @@ public class CuriosConfig {
   public static class Server {
 
     public ForgeConfigSpec.EnumValue<KeepCurios> keepCurios;
-    public ForgeConfigSpec.BooleanValue enableExperimentalMenu;
+    public ForgeConfigSpec.BooleanValue enableLegacyMenu;
     public ForgeConfigSpec.IntValue minimumColumns;
     public ForgeConfigSpec.IntValue maxSlotsPerPage;
 
@@ -76,10 +76,10 @@ public class CuriosConfig {
 
       builder.push("menu");
 
-      enableExperimentalMenu =
-          builder.comment("Enables the experimental new Curios menu that replaces the default one.")
-              .translation(CONFIG_PREFIX + "enableExperimentalMenu")
-              .define("enableExperimentalMenu", false);
+      enableLegacyMenu =
+          builder.comment("Enables the old legacy Curios menu for better backwards compatibility.")
+              .translation(CONFIG_PREFIX + "enableLegacyMenu")
+              .define("enableLegacyMenu", false);
 
       builder.push("experimental");
 
@@ -88,7 +88,7 @@ public class CuriosConfig {
 
       maxSlotsPerPage = builder.comment("The maximum number of slots per page of the Curios menu.")
           .translation(CONFIG_PREFIX + "maxSlotsPerPage")
-          .defineInRange("maxSlotsPerPage", 64, 1, 64);
+          .defineInRange("maxSlotsPerPage", 48, 1, 48);
 
       builder.pop();
       builder.pop();
