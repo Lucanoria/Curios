@@ -146,7 +146,10 @@ public class CuriosScreen extends AbstractContainerScreen<CuriosContainer>
       Tuple<Integer, Integer> offsets = getButtonOffset(false);
       this.buttonCurios = new CuriosButton(this, this.getGuiLeft() + offsets.getA(),
           this.height / 2 + offsets.getB(), 14, 14, 50, 0, 14, CURIO_INVENTORY);
-      this.addRenderableWidget(this.buttonCurios);
+
+      if (CuriosClientConfig.CLIENT.enableButton.get()) {
+        this.addRenderableWidget(this.buttonCurios);
+      }
 
       if (!this.menu.player.isCreative()) {
         this.addRenderableWidget(
