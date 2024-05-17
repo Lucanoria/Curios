@@ -47,5 +47,5 @@
   "gui.curios.toggle": "Toggle Visibility",
   "gui.curios.toggle.cosmetics": "Toggle Cosmetics",
   "gui.curios.page": "Page %d / %d",
-  "curios.networking.failed": "Curios Networking Failure"
+  "curios.networking.failed": "Curios Networking Failure: %s"
 }
