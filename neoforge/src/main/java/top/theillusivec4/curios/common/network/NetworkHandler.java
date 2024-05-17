@@ -58,30 +58,42 @@ public class NetworkHandler {
     registrar.play(CPacketToggleRender.ID, CPacketToggleRender::new,
         handler -> handler.server(CuriosServerPayloadHandler.getInstance()::handlerToggleRender));
     registrar.play(CPacketToggleCosmetics.ID, CPacketToggleCosmetics::new,
-        handler -> handler.server(CuriosServerPayloadHandler.getInstance()::handlerToggleCosmetics));
+        handler -> handler.server(
+            CuriosServerPayloadHandler.getInstance()::handlerToggleCosmetics));
 
     // Server Packets
     registrar.play(SPacketSyncStack.ID, SPacketSyncStack::new,
-        handler -> handler.client(CuriosClientPayloadHandler.getInstance()::handleSyncStack));
+        handler -> handler.client((payload, context) -> CuriosClientPayloadHandler.getInstance()
+            .handleSyncStack(payload, context)));
     registrar.play(SPacketGrabbedItem.ID, SPacketGrabbedItem::new,
-        handler -> handler.client(CuriosClientPayloadHandler.getInstance()::handleGrabbedItem));
+        handler -> handler.client((payload, context) -> CuriosClientPayloadHandler.getInstance()
+            .handleGrabbedItem(payload, context)));
     registrar.play(SPacketSyncCurios.ID, SPacketSyncCurios::new,
-        handler -> handler.client(CuriosClientPayloadHandler.getInstance()::handleSyncCurios));
+        handler -> handler.client((payload, context) -> CuriosClientPayloadHandler.getInstance()
+            .handleSyncCurios(payload, context)));
     registrar.play(SPacketSyncData.ID, SPacketSyncData::new,
-        handler -> handler.client(CuriosClientPayloadHandler.getInstance()::handleSyncData));
+        handler -> handler.client((payload, context) -> CuriosClientPayloadHandler.getInstance()
+            .handleSyncData(payload, context)));
     registrar.play(SPacketSyncModifiers.ID, SPacketSyncModifiers::new,
-        handler -> handler.client(CuriosClientPayloadHandler.getInstance()::handleSyncModifiers));
+        handler -> handler.client(((payload, context) -> CuriosClientPayloadHandler.getInstance()
+            .handleSyncModifiers(payload, context))));
     registrar.play(SPacketSyncRender.ID, SPacketSyncRender::new,
-        handler -> handler.client(CuriosClientPayloadHandler.getInstance()::handleSyncRender));
+        handler -> handler.client(((payload, context) -> CuriosClientPayloadHandler.getInstance()
+            .handleSyncRender(payload, context))));
     registrar.play(SPacketBreak.ID, SPacketBreak::new,
-        handler -> handler.client(CuriosClientPayloadHandler.getInstance()::handleBreak));
+        handler -> handler.client(((payload, context) -> CuriosClientPayloadHandler.getInstance()
+            .handleBreak(payload, context))));
     registrar.play(SPacketScroll.ID, SPacketScroll::new,
-        handler -> handler.client(CuriosClientPayloadHandler.getInstance()::handleScroll));
+        handler -> handler.client(((payload, context) -> CuriosClientPayloadHandler.getInstance()
+            .handleScroll(payload, context))));
     registrar.play(SPacketPage.ID, SPacketPage::new,
-        handler -> handler.client(CuriosClientPayloadHandler.getInstance()::handlePage));
+        handler -> handler.client(((payload, context) -> CuriosClientPayloadHandler.getInstance()
+            .handlePage(payload, context))));
     registrar.play(SPacketSetIcons.ID, SPacketSetIcons::new,
-        handler -> handler.client(CuriosClientPayloadHandler.getInstance()::handleSetIcons));
+        handler -> handler.client((((payload, context) -> CuriosClientPayloadHandler.getInstance()
+            .handleSetIcons(payload, context)))));
     registrar.play(SPacketQuickMove.ID, SPacketQuickMove::new,
-        handler -> handler.client(CuriosClientPayloadHandler.getInstance()::handleQuickMove));
+        handler -> handler.client((((payload, context) -> CuriosClientPayloadHandler.getInstance()
+            .handleQuickMove(payload, context)))));
   }
 }
