@@ -2,7 +2,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/TheIllusiveC4/Curios/blob/1.20.4/CHANGELOG.md).
 
-## [7.4.1+1.20.4] - 2024.05.16
+## [7.4.2+1.20.6] - 2024.05.21
 ### Fixed
-- [NeoForge] Fixed dedicated server crash [#409](https://github.com/TheIllusiveC4/Curios/issues/409)
-- [NeoForge] Fixed client-side item syncing issue [#407](https://github.com/TheIllusiveC4/Curios/issues/407)
+- [NeoForge] Fixed non-player entities constructing without curios inventory data
