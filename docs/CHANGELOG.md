@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 Prior to version 5.2.0, this projected used [Forge Recommended Versioning](https://mcforge.readthedocs.io/en/latest/conventions/versioning/).
 
+## [5.9.1+1.20.1] - 2024.05.23
+### Changed
+- Updated cosmetic slot texture for new GUI
+### Fixed
+- Fixed crash with JEI integration [#412](https://github.com/TheIllusiveC4/Curios/issues/412)
+
 ## [5.9.0+1.20.1] - 2024.04.27
 ### Added
 - Added `enableLegacyMenu` configuration option to `curios-server.toml` to opt-out from the new screen to the old screen
