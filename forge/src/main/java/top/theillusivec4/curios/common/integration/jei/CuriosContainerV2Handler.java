@@ -15,13 +15,12 @@ public class CuriosContainerV2Handler implements IGuiContainerHandler<CuriosScre
   @Nonnull
   public List<Rect2i> getGuiExtraAreas(CuriosScreenV2 containerScreen) {
     LocalPlayer player = containerScreen.getMinecraft().player;
+    List<Integer> list = containerScreen.getMenu().grid;
 
-    if (player != null) {
+    if (player != null && list != null) {
       List<Rect2i> areas = new ArrayList<>();
       int left = containerScreen.getGuiLeft() - containerScreen.panelWidth;
       int top = containerScreen.getGuiTop();
-
-      List<Integer> list = containerScreen.getMenu().grid;
       int height = 0;
 
       if (!list.isEmpty()) {
