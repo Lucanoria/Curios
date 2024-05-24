@@ -6,6 +6,7 @@ Prior to version 5.2.0, this projected used [Forge Recommended Versioning](https
 
 ## [7.4.2+1.20.6] - 2024.05.21
 ### Fixed
+- Fixed crash with JEI integration [#412](https://github.com/TheIllusiveC4/Curios/issues/412)
 - [NeoForge] Fixed non-player entities constructing without curios inventory data
 
 ## [7.4.1+1.20.4] - 2024.05.16

@@ -4,4 +4,5 @@ This is a copy of the changelog for the most recent version. For the full versio
 
 ## [7.4.2+1.20.6] - 2024.05.21
 ### Fixed
+- Fixed crash with JEI integration [#412](https://github.com/TheIllusiveC4/Curios/issues/412)
 - [NeoForge] Fixed non-player entities constructing without curios inventory data
