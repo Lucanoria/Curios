@@ -89,8 +89,7 @@ public class CuriosEntityManager extends SimpleJsonResourceReloadListener {
               "curios/entities",
               (resourceLocation, inputStreamIoSupplier) -> {
                 String path = resourceLocation.getPath();
-                ResourceLocation rl = new ResourceLocation(namespace,
-                    path.substring("curios/entities/".length(), path.length() - ".json".length()));
+                ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(namespace, path.substring("curios/entities/".length(), path.length() - ".json".length()));
                 JsonElement el = pObject.get(rl);
                 if (el != null) {
                   sorted.put(rl, el);
@@ -175,8 +174,7 @@ public class CuriosEntityManager extends SimpleJsonResourceReloadListener {
     for (Tag tag1 : tag) {
 
       if (tag1 instanceof CompoundTag entity) {
-        EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.getOptional(
-            new ResourceLocation(entity.getString("Entity"))).orElse(null);
+        EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.getOptional(ResourceLocation.parse(entity.getString("Entity"))).orElse(null);
 
         if (type != null) {
           ListTag slots = entity.getList("Slots", Tag.TAG_STRING);
@@ -214,15 +212,14 @@ public class CuriosEntityManager extends SimpleJsonResourceReloadListener {
 
       if (entity.startsWith("#")) {
         BuiltInRegistries.ENTITY_TYPE.getTag(
-                TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(entity)))
+                TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse(entity)))
             .ifPresent(named -> {
               for (Holder<EntityType<?>> entityTypeHolder : named) {
                 toAdd.add(entityTypeHolder.value());
               }
             });
       } else {
-        EntityType<?> type =
-            BuiltInRegistries.ENTITY_TYPE.getOptional(new ResourceLocation(entity)).orElse(null);
+        EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.getOptional(ResourceLocation.parse(entity)).orElse(null);
 
         if (type != null) {
           toAdd.add(type);

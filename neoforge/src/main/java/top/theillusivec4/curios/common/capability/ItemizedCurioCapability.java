@@ -34,6 +34,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
@@ -95,10 +96,8 @@ public class ItemizedCurioCapability implements ICurio {
 
   @Nonnull
   @Override
-  public DropRule getDropRule(SlotContext slotContext, DamageSource source, int lootingLevel,
-                              boolean recentlyHit) {
-    return this.curioItem
-        .getDropRule(slotContext, source, lootingLevel, recentlyHit, this.getStack());
+  public DropRule getDropRule(SlotContext slotContext, DamageSource source, boolean recentlyHit) {
+    return this.curioItem.getDropRule(slotContext, source, recentlyHit, this.getStack());
   }
 
   @Override

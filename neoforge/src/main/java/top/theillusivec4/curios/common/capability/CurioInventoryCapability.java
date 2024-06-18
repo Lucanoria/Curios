@@ -39,6 +39,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -372,9 +373,7 @@ public class CurioInventoryCapability implements ICuriosItemHandler {
 
   @Override
   public void loadInventory(ListTag data) {
-
     if (data != null) {
-
       for (int i = 0; i < data.size(); i++) {
         CompoundTag tag = data.getCompound(i);
         String identifier = tag.getString("Identifier");
@@ -407,16 +406,14 @@ public class CurioInventoryCapability implements ICuriosItemHandler {
   }
 
   @Override
-  public void addTransientSlotModifier(String slot, UUID uuid, String name, double amount,
-                                       AttributeModifier.Operation operation) {
+  public void addTransientSlotModifier(String slot, ResourceLocation name, double amount, AttributeModifier.Operation operation) {
     Multimap<String, AttributeModifier> map = LinkedHashMultimap.create();
-    map.put(slot, new AttributeModifier(uuid, name, amount, operation));
+    map.put(slot, new AttributeModifier(name, amount, operation));
     this.addTransientSlotModifiers(map);
   }
 
   @Override
   public void addTransientSlotModifiers(Multimap<String, AttributeModifier> modifiers) {
-
     for (Map.Entry<String, Collection<AttributeModifier>> entry : modifiers.asMap().entrySet()) {
       String id = entry.getKey();
 
@@ -431,16 +428,14 @@ public class CurioInventoryCapability implements ICuriosItemHandler {
   }
 
   @Override
-  public void addPermanentSlotModifier(String slot, UUID uuid, String name, double amount,
-                                       AttributeModifier.Operation operation) {
+  public void addPermanentSlotModifier(String slot, ResourceLocation name, double amount, AttributeModifier.Operation operation) {
     Multimap<String, AttributeModifier> map = LinkedHashMultimap.create();
-    map.put(slot, new AttributeModifier(uuid, name, amount, operation));
+    map.put(slot, new AttributeModifier(name, amount, operation));
     this.addPermanentSlotModifiers(map);
   }
 
   @Override
   public void addPermanentSlotModifiers(Multimap<String, AttributeModifier> modifiers) {
-
     for (Map.Entry<String, Collection<AttributeModifier>> entry : modifiers.asMap().entrySet()) {
       String id = entry.getKey();
 
@@ -455,15 +450,14 @@ public class CurioInventoryCapability implements ICuriosItemHandler {
   }
 
   @Override
-  public void removeSlotModifier(String slot, UUID uuid) {
+  public void removeSlotModifier(String slot, ResourceLocation name) {
     Multimap<String, AttributeModifier> map = LinkedHashMultimap.create();
-    map.put(slot, new AttributeModifier(uuid, "", 0, AttributeModifier.Operation.ADD_VALUE));
+    map.put(slot, new AttributeModifier(name, 0, AttributeModifier.Operation.ADD_VALUE));
     this.removeSlotModifiers(map);
   }
 
   @Override
   public void removeSlotModifiers(Multimap<String, AttributeModifier> modifiers) {
-
     for (Map.Entry<String, Collection<AttributeModifier>> entry : modifiers.asMap().entrySet()) {
       String id = entry.getKey();
 

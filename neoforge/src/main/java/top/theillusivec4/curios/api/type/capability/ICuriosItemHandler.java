@@ -32,6 +32,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -239,13 +240,11 @@ public interface ICuriosItemHandler {
    * These slot modifiers are not serialized and disappear upon deserialization.
    *
    * @param slot      Identifier of the {@link ISlotType} to add the slot modifier to
-   * @param uuid      UUID for the {@link AttributeModifier}
    * @param name      Name for the attribute modifier
    * @param amount    Amount for the attribute modifier
    * @param operation Operation for the attribute modifier
    */
-  default void addTransientSlotModifier(String slot, UUID uuid, String name, double amount,
-                                        AttributeModifier.Operation operation) {
+  default void addTransientSlotModifier(String slot, ResourceLocation name, double amount, AttributeModifier.Operation operation) {
     LOGGER.error("Missing method implementation!");
   }
 
@@ -264,12 +263,11 @@ public interface ICuriosItemHandler {
    * These slot modifiers are not serialized and disappear upon deserialization.
    *
    * @param slot      Identifier of the {@link ISlotType} to add the slot modifier to
-   * @param uuid      UUID for the {@link AttributeModifier}
    * @param name      Name for the attribute modifier
    * @param amount    Amount for the attribute modifier
    * @param operation Operation for the attribute modifier
    */
-  default void addPermanentSlotModifier(String slot, UUID uuid, String name, double amount,
+  default void addPermanentSlotModifier(String slot, ResourceLocation name, double amount,
                                         AttributeModifier.Operation operation) {
     LOGGER.error("Missing method implementation!");
   }
@@ -282,12 +280,12 @@ public interface ICuriosItemHandler {
   void addPermanentSlotModifiers(Multimap<String, AttributeModifier> modifiers);
 
   /**
-   * Removes the specified slot modifier (via UUID) from the handler.
+   * Removes the specified slot modifier from the handler.
    *
    * @param slot Identifier of the {@link ISlotType} to remove the modifier from
-   * @param uuid UUID of the {@link AttributeModifier} to remove
+   * @param name ResourceLocation of the {@link AttributeModifier} to remove
    */
-  default void removeSlotModifier(String slot, UUID uuid) {
+  default void removeSlotModifier(String slot, ResourceLocation name) {
     LOGGER.error("Missing method implementation!");
   }
 

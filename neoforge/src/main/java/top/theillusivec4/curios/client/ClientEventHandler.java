@@ -34,9 +34,15 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -51,6 +57,8 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import top.theillusivec4.curios.Curios;
+import top.theillusivec4.curios.CuriosConstants;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotAttribute;
 import top.theillusivec4.curios.api.SlotContext;
@@ -61,10 +69,8 @@ import top.theillusivec4.curios.common.network.client.CPacketOpenCurios;
 
 public class ClientEventHandler {
 
-  private static final UUID ATTACK_DAMAGE_MODIFIER = UUID
-      .fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
-  private static final UUID ATTACK_SPEED_MODIFIER = UUID
-      .fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
+  private static final ResourceLocation ATTACK_DAMAGE_MODIFIER = ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, "attack_damage_modifier");
+  private static final ResourceLocation ATTACK_SPEED_MODIFIER = ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, "attack_speed_modifier");
 
   @SubscribeEvent
   public void onClientTick(ClientTickEvent.Post evt) {
@@ -132,8 +138,8 @@ public class ClientEventHandler {
           }
         }
       }
-      Map<String, ISlotType> map = player != null ? CuriosApi.getItemStackSlots(stack, player) :
-          CuriosApi.getItemStackSlots(stack, FMLLoader.getDist() == Dist.CLIENT);
+
+      Map<String, ISlotType> map = player != null ? CuriosApi.getItemStackSlots(stack, player) : CuriosApi.getItemStackSlots(stack, FMLLoader.getDist() == Dist.CLIENT);
       Set<String> curioTags = Set.copyOf(map.keySet());
 
       if (curioTags.contains("curio")) {
@@ -143,9 +149,7 @@ public class ClientEventHandler {
 
       if (!slots.isEmpty()) {
         List<Component> tagTooltips = new ArrayList<>();
-        MutableComponent slotsTooltip =
-            Component.translatable("curios.tooltip.slot").append(" ")
-                .withStyle(ChatFormatting.GOLD);
+        MutableComponent slotsTooltip = Component.translatable("curios.tooltip.slot").append(" ").withStyle(ChatFormatting.GOLD);
 
         for (int j = 0; j < slots.size(); j++) {
           String key = "curios.identifier." + slots.get(j);
@@ -175,9 +179,7 @@ public class ClientEventHandler {
         List<Component> attributeTooltip = new ArrayList<>();
 
         for (String identifier : slots) {
-          Multimap<Holder<Attribute>, AttributeModifier> multimap =
-              CuriosApi.getAttributeModifiers(new SlotContext(identifier, player, 0, false, true),
-                  UUID.randomUUID(), stack);
+          Multimap<Holder<Attribute>, AttributeModifier> multimap = CuriosApi.getAttributeModifiers(new SlotContext(identifier, player, 0, false, true), UUID.randomUUID(), stack);
 
           if (!multimap.isEmpty()) {
             boolean init = false;
@@ -200,16 +202,17 @@ public class ClientEventHandler {
               boolean flag = false;
 
               if (player != null) {
-
-                if (attributemodifier.id() == ATTACK_DAMAGE_MODIFIER) {
+                if (attributemodifier.is(ATTACK_DAMAGE_MODIFIER)) {
                   AttributeInstance att = player.getAttribute(Attributes.ATTACK_DAMAGE);
 
                   if (att != null) {
                     amount = amount + att.getBaseValue();
                   }
-                  amount = amount + EnchantmentHelper.getDamageBonus(stack, null);
+                  if (player.level() instanceof ServerLevel serverLevel) {
+                    amount = EnchantmentHelper.modifyDamage(serverLevel, stack, null, player.damageSources().generic(), (float) amount);
+                  }
                   flag = true;
-                } else if (attributemodifier.id() == ATTACK_SPEED_MODIFIER) {
+                } else if (attributemodifier.is(ATTACK_SPEED_MODIFIER)) {
                   AttributeInstance att = player.getAttribute(Attributes.ATTACK_SPEED);
 
                   if (att != null) {

@@ -54,6 +54,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import top.theillusivec4.curios.CuriosConstants;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotAttribute;
 
@@ -86,7 +87,7 @@ public class SetCurioAttributesFunction extends LootItemConditionalFunction {
 
   public static void register() {
     TYPE = Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
-        new ResourceLocation(CuriosApi.MODID, "set_curio_attributes"),
+        ResourceLocation.fromNamespaceAndPath(CuriosConstants.MOD_ID, "set_curio_attributes"),
         new LootItemFunctionType<>(CODEC));
   }
 
@@ -111,11 +112,9 @@ public class SetCurioAttributesFunction extends LootItemConditionalFunction {
       String slot = Util.getRandom(modifier.slots, random);
 
       if (modifier.attribute.value() instanceof SlotAttribute wrapper) {
-        CuriosApi.addSlotModifier(stack, wrapper.getIdentifier(), modifier.name, uuid,
-            modifier.amount.getFloat(context), modifier.operation, slot);
+        CuriosApi.addSlotModifier(stack, wrapper.getIdentifier(), modifier.name, modifier.amount.getFloat(context), modifier.operation, slot);
       } else {
-        CuriosApi.addModifier(stack, modifier.attribute, modifier.name, uuid,
-            modifier.amount.getFloat(context), modifier.operation, slot);
+        CuriosApi.addModifier(stack, modifier.attribute, modifier.name, modifier.amount.getFloat(context), modifier.operation, slot);
       }
     }
     return stack;
@@ -159,7 +158,7 @@ public class SetCurioAttributesFunction extends LootItemConditionalFunction {
         ResourceLocation rl;
 
         if (value.value() instanceof SlotAttribute wrapper) {
-          rl = new ResourceLocation(CuriosApi.MODID, wrapper.getIdentifier());
+          rl = ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, wrapper.getIdentifier());
         } else {
           rl = BuiltInRegistries.ATTRIBUTE.getKey(value.value());
         }

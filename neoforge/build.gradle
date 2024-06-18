@@ -62,49 +62,51 @@ dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
 
     // compile against the JEI API but do not include it at runtime
-    compileOnly "mezz.jei:jei-1.20.4-common-api:${jei_version}"
-    compileOnly "mezz.jei:jei-1.20.4-forge-api:${jei_version}"
+//    compileOnly "mezz.jei:jei-1.20.4-common-api:${jei_version}"
+//    compileOnly "mezz.jei:jei-1.20.4-forge-api:${jei_version}"
     // at runtime, use the full JEI jar for Forge
 //    runtimeOnly "mezz.jei:jei-1.20.4-forge:${jei_version}"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
-task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
-    apiToken = findProperty('curseKey')
-    //debugMode = true
-    def projectId = "${cf_id}".toString()
-    def mainFile = upload(projectId, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
-    mainFile.changelogType = 'markdown'
-    mainFile.changelog = file('../CHANGELOG_LATEST.md')
-    mainFile.releaseType = "${release_type}"
-    "${release_versions}".split(',').each {
-        mainFile.addGameVersion("${it}")
-    }
-    mainFile.withAdditionalFile(sourcesJar)
-    mainFile.withAdditionalFile(apiJar)
+//task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+//    apiToken = findProperty('curseKey')
+//    //debugMode = true
+//    def projectId = "${cf_id}".toString()
+//    def mainFile = upload(projectId, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
+//    mainFile.changelogType = 'markdown'
+//    mainFile.changelog = file('../CHANGELOG_LATEST.md')
+//    mainFile.releaseType = "${release_type}"
+//    "${release_versions}".split(',').each {
+//        mainFile.addGameVersion("${it}")
+//    }
+//    mainFile.withAdditionalFile(sourcesJar)
+//    mainFile.withAdditionalFile(apiJar)
+//
+//    doLast {
+//
+//        if (project.hasProperty('cf_page') && mainFile.curseFileId != null) {
+//            project.ext.curse_link = "${cf_page}/files/${mainFile.curseFileId}"
+//        }
+//    }
+//}
 
-    doLast {
+//modrinth {
+//    token = findProperty('modrinthKey') ?: ""
+//    //debugMode = true
+//    projectId = "${modrinth_id}"
+//    versionName = getArchivesBaseName() + "-" + getVersion()
+//    versionType = "${release_type}"
+//    changelog = file('../CHANGELOG_LATEST.md').text
+//    uploadFile = file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")
+//    additionalFiles = [sourcesJar, apiJar]
+//    gameVersions = "${release_versions}".split(",") as List<String>
+//}
 
-        if (project.hasProperty('cf_page') && mainFile.curseFileId != null) {
-            project.ext.curse_link = "${cf_page}/files/${mainFile.curseFileId}"
-        }
-    }
-}
-
-modrinth {
-    token = findProperty('modrinthKey') ?: ""
-    //debugMode = true
-    projectId = "${modrinth_id}"
-    versionName = getArchivesBaseName() + "-" + getVersion()
-    versionType = "${release_type}"
-    changelog = file('../CHANGELOG_LATEST.md').text
-    uploadFile = file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")
-    additionalFiles = [sourcesJar, apiJar]
-    gameVersions = "${release_versions}".split(",") as List<String>
-}
-
-tasks.modrinth.doLast {
-
-    if (project.hasProperty('modrinth_page') && tasks.modrinth.newVersion != null) {
-        project.ext.modrinth_link = "${modrinth_page}/version/${tasks.modrinth.newVersion.id}"
-    }
-}
+//tasks.modrinth.doLast {
+//
+//    if (project.hasProperty('modrinth_page') && tasks.modrinth.newVersion != null) {
+//        project.ext.modrinth_link = "${modrinth_page}/version/${tasks.modrinth.newVersion.id}"
+//    }
+//}

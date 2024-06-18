@@ -20,8 +20,7 @@ import top.theillusivec4.curiostest.client.model.KnucklesModel;
 
 public class KnucklesRenderer implements ICurioRenderer {
 
-  private static final ResourceLocation KNUCKLES_TEXTURE = new ResourceLocation(CuriosTest.MODID,
-      "textures/entity/knuckles.png");
+  private static final ResourceLocation KNUCKLES_TEXTURE = ResourceLocation.fromNamespaceAndPath(CuriosTest.MODID, "textures/entity/knuckles.png");
 
   private final KnucklesModel model;
 
@@ -31,26 +30,14 @@ public class KnucklesRenderer implements ICurioRenderer {
   }
 
   @Override
-  public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack,
-                                                                        SlotContext slotContext,
-                                                                        PoseStack matrixStack,
-                                                                        RenderLayerParent<T, M> renderLayerParent,
-                                                                        MultiBufferSource renderTypeBuffer,
-                                                                        int light, float limbSwing,
-                                                                        float limbSwingAmount,
-                                                                        float partialTicks,
-                                                                        float ageInTicks,
-                                                                        float netHeadYaw,
-                                                                        float headPitch) {
+  public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack, SlotContext slotContext, PoseStack matrixStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource renderTypeBuffer, int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
     LivingEntity entity = slotContext.entity();
     this.model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
     this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
     ICurioRenderer.followBodyRotations(entity, this.model);
     VertexConsumer vertexconsumer = ItemRenderer
-        .getArmorFoilBuffer(renderTypeBuffer, RenderType.armorCutoutNoCull(KNUCKLES_TEXTURE), false,
-            stack.hasFoil());
+        .getArmorFoilBuffer(renderTypeBuffer, RenderType.armorCutoutNoCull(KNUCKLES_TEXTURE), stack.hasFoil());
     this.model
-        .renderToBuffer(matrixStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
-            1.0F, 1.0F);
+        .renderToBuffer(matrixStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 1);
   }
 }

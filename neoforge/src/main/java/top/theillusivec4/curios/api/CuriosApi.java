@@ -27,10 +27,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -46,6 +48,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.loading.FMLLoader;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
+import top.theillusivec4.curios.CuriosConstants;
 import top.theillusivec4.curios.api.type.ISlotType;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
@@ -209,8 +212,7 @@ public final class CuriosApi {
    * @param livingEntity The entity with the slot types
    * @return The slot types for the provided ItemStack and entity
    */
-  public static Map<String, ISlotType> getItemStackSlots(ItemStack stack,
-                                                         LivingEntity livingEntity) {
+  public static Map<String, ISlotType> getItemStackSlots(ItemStack stack, LivingEntity livingEntity) {
     apiError();
     return Map.of();
   }
@@ -273,12 +275,11 @@ public final class CuriosApi {
    *
    * @param map        A {@link Multimap} of attributes to attribute modifiers
    * @param identifier The identifier of the slot to add the modifier onto
-   * @param uuid       A UUID associated with the modifier
    * @param amount     The amount of the modifier
    * @param operation  The operation of the modifier
    */
   public static void addSlotModifier(Multimap<Holder<Attribute>, AttributeModifier> map,
-                                     String identifier, UUID uuid, double amount,
+                                     String identifier, double amount,
                                      AttributeModifier.Operation operation) {
     apiError();
   }
@@ -289,12 +290,11 @@ public final class CuriosApi {
    * @param stack      The ItemStack to add the modifier to
    * @param identifier The identifier of the slot to add the modifier onto
    * @param name       The name for the modifier
-   * @param uuid       A UUID associated with the modifier
    * @param amount     The amount of the modifier
    * @param operation  The operation of the modifier
    * @param slot       The slot that the ItemStack provides the modifier from
    */
-  public static void addSlotModifier(ItemStack stack, String identifier, String name, UUID uuid,
+  public static void addSlotModifier(ItemStack stack, String identifier, String name,
                                      double amount, AttributeModifier.Operation operation,
                                      String slot) {
     apiError();
@@ -323,14 +323,11 @@ public final class CuriosApi {
    * @param stack     The ItemStack to add the modifier to
    * @param attribute The attribute to add the modifier onto
    * @param name      The name for the modifier
-   * @param uuid      A UUID associated with the modifier
    * @param amount    The amount of the modifier
    * @param operation The operation of the modifier
    * @param slot      The slot that the ItemStack provides the modifier from
    */
-  public static void addModifier(ItemStack stack, Holder<Attribute> attribute, String name,
-                                 UUID uuid, double amount, AttributeModifier.Operation operation,
-                                 String slot) {
+  public static void addModifier(ItemStack stack, Holder<Attribute> attribute, String name, double amount, AttributeModifier.Operation operation, String slot) {
     apiError();
   }
 
@@ -341,8 +338,7 @@ public final class CuriosApi {
    * @param resourceLocation The unique {@link ResourceLocation} of the validator
    * @param predicate        The predicate to register for a given stack and {@link SlotResult}
    */
-  public static void registerCurioPredicate(ResourceLocation resourceLocation,
-                                            Predicate<SlotResult> predicate) {
+  public static void registerCurioPredicate(ResourceLocation resourceLocation, Predicate<SlotResult> predicate) {
     apiError();
   }
 
@@ -353,8 +349,7 @@ public final class CuriosApi {
    * @param resourceLocation The unique {@link ResourceLocation} of the validator
    * @return An Optional of the predicate found for the ResourceLocation, or empty otherwise
    */
-  public static Optional<Predicate<SlotResult>> getCurioPredicate(
-      ResourceLocation resourceLocation) {
+  public static Optional<Predicate<SlotResult>> getCurioPredicate(ResourceLocation resourceLocation) {
     apiError();
     return Optional.empty();
   }
@@ -395,11 +390,11 @@ public final class CuriosApi {
   }
 
   /**
-   * Performs breaking behavior used in the runnable through {@link ItemStack#hurtAndBreak(int, RandomSource, LivingEntity, Runnable)}}
+   * Performs breaking behavior used in the runnable through {@link ItemStack#hurtAndBreak(int, ServerLevel, LivingEntity, Consumer<Item>)}}
    * <br>
    * This will be necessary in order to trigger break animations in curio slots
    * <br>
-   * Example: { stack.hurtAndBreak(amount, entity, () -> CuriosApi.broadcastCurioBreakEvent(slotContext)); }
+   * Example: { stack.hurtAndBreak(amount, level entity, item -> CuriosApi.broadcastCurioBreakEvent(slotContext)); }
    *
    * @param slotContext Context about the slot that the curio is in
    */
@@ -409,6 +404,9 @@ public final class CuriosApi {
 
   static void apiError() {
     LOGGER.error("Missing Curios API implementation!");
+    for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) {
+      LOGGER.error(stackTraceElement.toString());
+    }
   }
 
   // ========= DEPRECATED =============
@@ -429,7 +427,7 @@ public final class CuriosApi {
   @Nonnull
   public static ResourceLocation getSlotIcon(String id) {
     return CuriosApi.getSlot(id, true).map(ISlotType::getIcon)
-        .orElse(new ResourceLocation(CuriosApi.MODID, "slot/empty_curio_slot"));
+        .orElse(ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, "slot/empty_curio_slot"));
   }
 
   /**

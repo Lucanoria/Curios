@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.TriState;
@@ -89,7 +90,7 @@ public class DynamicStackHandler extends ItemStackHandler implements IDynamicSta
     boolean isCreative = ctx.entity() instanceof Player player && player.isCreative();
 
     if (result == TriState.TRUE ||
-        ((existing.isEmpty() || isCreative || !EnchantmentHelper.hasBindingCurse(existing)) &&
+        ((existing.isEmpty() || isCreative || !EnchantmentHelper.has(existing, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) &&
             CuriosApi.getCurio(existing).map(curio -> curio.canUnequip(ctx)).orElse(true))) {
       return super.extractItem(slot, amount, simulate);
     }

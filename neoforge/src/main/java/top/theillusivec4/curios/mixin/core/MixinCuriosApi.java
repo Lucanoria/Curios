@@ -34,11 +34,13 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import top.theillusivec4.curios.CuriosConstants;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.SlotResult;
@@ -48,6 +50,7 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.mixin.CuriosImplMixinHooks;
 
+@Debug(export = true)
 @Mixin(value = CuriosApi.class, remap = false)
 public class MixinCuriosApi {
 
@@ -70,9 +73,7 @@ public class MixinCuriosApi {
   }
 
   @Inject(at = @At("HEAD"), method = "getItemStackSlots(Lnet/minecraft/world/item/ItemStack;Z)Ljava/util/Map;", cancellable = true)
-  private static void curios$getItemStackSlots(ItemStack stack, boolean isClient,
-                                               CallbackInfoReturnable<Map<String, ISlotType>> cir) {
-
+  private static void curios$getItemStackSlots(ItemStack stack, boolean isClient, CallbackInfoReturnable<Map<String, ISlotType>> cir) {
     cir.setReturnValue(CuriosImplMixinHooks.getItemStackSlots(stack, isClient));
   }
 
@@ -107,31 +108,28 @@ public class MixinCuriosApi {
     cir.setReturnValue(CuriosImplMixinHooks.getAttributeModifiers(slotContext, uuid, stack));
   }
 
-  @Inject(at = @At("HEAD"), method = "addSlotModifier(Lcom/google/common/collect/Multimap;Ljava/lang/String;Ljava/util/UUID;DLnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;)V", cancellable = true)
+  @Inject(at = @At("HEAD"), method = "addSlotModifier(Lcom/google/common/collect/Multimap;Ljava/lang/String;DLnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;)V", cancellable = true)
   private static void curios$addSlotModifier(Multimap<Holder<Attribute>, AttributeModifier> map,
-                                             String identifier,
-                                             UUID uuid, double amount,
+                                             String identifier, double amount,
                                              AttributeModifier.Operation operation,
                                              CallbackInfo ci) {
-    CuriosImplMixinHooks.addSlotModifier(map, identifier, uuid, amount, operation);
+    CuriosImplMixinHooks.addSlotModifier(map, identifier, amount, operation);
     ci.cancel();
   }
 
-  @Inject(at = @At("HEAD"), method = "addSlotModifier(Lnet/minecraft/world/item/ItemStack;Ljava/lang/String;Ljava/lang/String;Ljava/util/UUID;DLnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;Ljava/lang/String;)V", cancellable = true)
-  private static void curios$addSlotModifier(ItemStack stack, String identifier, String name,
-                                             UUID uuid, double amount,
+  @Inject(at = @At("HEAD"), method = "addSlotModifier(Lnet/minecraft/world/item/ItemStack;Ljava/lang/String;Ljava/lang/String;DLnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;Ljava/lang/String;)V", cancellable = true)
+  private static void curios$addSlotModifier(ItemStack stack, String identifier, String name, double amount,
                                              AttributeModifier.Operation operation, String slot,
                                              CallbackInfo ci) {
-    CuriosImplMixinHooks.addSlotModifier(stack, identifier, name, uuid, amount, operation, slot);
+    CuriosImplMixinHooks.addSlotModifier(stack, identifier, name, amount, operation, slot);
     ci.cancel();
   }
 
   @Inject(at = @At("HEAD"), method = "addModifier", cancellable = true)
-  private static void curios$addModifier(ItemStack stack, Holder<Attribute> attribute, String name,
-                                         UUID uuid, double amount,
+  private static void curios$addModifier(ItemStack stack, Holder<Attribute> attribute, String name, double amount,
                                          AttributeModifier.Operation operation, String slot,
                                          CallbackInfo ci) {
-    CuriosImplMixinHooks.addModifier(stack, attribute, name, uuid, amount, operation, slot);
+    CuriosImplMixinHooks.addModifier(stack, attribute, name, amount, operation, slot);
     ci.cancel();
   }
 

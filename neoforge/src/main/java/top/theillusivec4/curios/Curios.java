@@ -115,7 +115,6 @@ public class Curios {
   }
 
   private void registerCaps(RegisterCapabilitiesEvent evt) {
-
     for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
 
       evt.registerEntity(CuriosCapability.ITEM_HANDLER, entityType,

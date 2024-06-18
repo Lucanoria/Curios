@@ -21,8 +21,7 @@ import top.theillusivec4.curiostest.client.model.CrownModel;
 
 public class CrownRenderer<L extends LivingEntity> implements ICurioRenderer {
 
-  private static final ResourceLocation CROWN_TEXTURE = new ResourceLocation(CuriosTest.MODID,
-      "textures/entity/crown.png");
+  private static final ResourceLocation CROWN_TEXTURE = ResourceLocation.fromNamespaceAndPath(CuriosTest.MODID, "textures/entity/crown.png");
   private final CrownModel<L> model;
 
   public CrownRenderer() {
@@ -30,23 +29,9 @@ public class CrownRenderer<L extends LivingEntity> implements ICurioRenderer {
   }
 
   @Override
-  public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack,
-                                                                        SlotContext slotContext,
-                                                                        PoseStack matrixStack,
-                                                                        RenderLayerParent<T, M> renderLayerParent,
-                                                                        MultiBufferSource renderTypeBuffer,
-                                                                        int light, float limbSwing,
-                                                                        float limbSwingAmount,
-                                                                        float partialTicks,
-                                                                        float ageInTicks,
-                                                                        float netHeadYaw,
-                                                                        float headPitch) {
+  public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack, SlotContext slotContext, PoseStack matrixStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource renderTypeBuffer, int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
     ICurioRenderer.followHeadRotations(slotContext.entity(), this.model.crown);
-    VertexConsumer vertexconsumer = ItemRenderer
-        .getArmorFoilBuffer(renderTypeBuffer, RenderType.armorCutoutNoCull(CROWN_TEXTURE), false,
-            stack.hasFoil());
-    this.model
-        .renderToBuffer(matrixStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
-            1.0F, 1.0F);
+    VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(renderTypeBuffer, RenderType.armorCutoutNoCull(CROWN_TEXTURE), stack.hasFoil());
+    this.model.renderToBuffer(matrixStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 1);
   }
 }

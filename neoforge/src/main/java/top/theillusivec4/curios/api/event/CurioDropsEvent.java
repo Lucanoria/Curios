@@ -35,8 +35,7 @@ import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
  * This event is fired inside the {@link net.neoforged.neoforge.event.entity.living.LivingDropsEvent}.<br>
  * <br>
  * {@link #source} contains the DamageSource that caused the drop to occur.<br> {@link #drops}
- * contains the ArrayList of ItemEntity that will be dropped.<br> {@link #lootingLevel} contains the
- * amount of loot that will be dropped.<br> {@link #recentlyHit} determines whether the Entity doing
+ * contains the ArrayList of ItemEntity that will be dropped.<br> {@link #recentlyHit} determines whether the Entity doing
  * the drop has recently been damaged.<br>
  * <br>
  * This event is fired on the {@link net.neoforged.neoforge.common.NeoForge#EVENT_BUS}.
@@ -45,16 +44,14 @@ public class CurioDropsEvent extends LivingEvent implements ICancellableEvent {
 
   private final DamageSource source;
   private final Collection<ItemEntity> drops;
-  private final int lootingLevel;
   private final boolean recentlyHit;
   private final ICuriosItemHandler curioHandler; // Curio handler for the entity
 
   public CurioDropsEvent(LivingEntity entity, ICuriosItemHandler handler, DamageSource source,
-                         Collection<ItemEntity> drops, int lootingLevel, boolean recentlyHit) {
+                         Collection<ItemEntity> drops, boolean recentlyHit) {
     super(entity);
     this.source = source;
     this.drops = drops;
-    this.lootingLevel = lootingLevel;
     this.recentlyHit = recentlyHit;
     this.curioHandler = handler;
   }
@@ -69,10 +66,6 @@ public class CurioDropsEvent extends LivingEvent implements ICancellableEvent {
 
   public Collection<ItemEntity> getDrops() {
     return this.drops;
-  }
-
-  public int getLootingLevel() {
-    return this.lootingLevel;
   }
 
   public boolean isRecentlyHit() {

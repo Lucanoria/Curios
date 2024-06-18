@@ -34,9 +34,7 @@ import top.theillusivec4.curios.common.network.client.CPacketPage;
 public class PageButton extends Button {
   private final CuriosScreen parentGui;
   private final Type type;
-  private static final ResourceLocation CURIO_INVENTORY =
-      new ResourceLocation(CuriosConstants.MOD_ID,
-          "textures/gui/curios/inventory_revamp.png");
+  private static final ResourceLocation CURIO_INVENTORY = ResourceLocation.fromNamespaceAndPath(CuriosConstants.MOD_ID, "textures/gui/curios/inventory_revamp.png");
 
   public PageButton(CuriosScreen parentGui, int xIn, int yIn, int widthIn, int heightIn,
                     Type type) {

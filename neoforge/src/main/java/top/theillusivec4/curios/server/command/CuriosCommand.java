@@ -181,8 +181,7 @@ public class CuriosCommand {
     return Command.SINGLE_SUCCESS;
   }
 
-  private static int growSlotForPlayer(CommandSourceStack source, ServerPlayer playerMP,
-                                       String slot, int amount) {
+  private static int growSlotForPlayer(CommandSourceStack source, ServerPlayer playerMP, String slot, int amount) {
     CuriosApi.getSlotHelper().growSlotType(slot, amount, playerMP);
     source.sendSuccess(() -> Component.translatable("commands.curios.add.success", amount, slot,
         playerMP.getDisplayName()), true);
