@@ -468,6 +468,7 @@ public class CurioStacksHandler implements ICurioStacksHandler {
           AttributeModifier.Operation.MULTIPLY_TOTAL)) {
         size *= mod.getAmount();
       }
+      size = Math.max(0, size);
 
       if (size != this.getSlots()) {
         this.resize((int) size);
@@ -487,7 +488,6 @@ public class CurioStacksHandler implements ICurioStacksHandler {
 
   private void resize(int newSize) {
     int currentSize = this.getSlots();
-    newSize = Math.max(0, newSize);
 
     if (currentSize != newSize) {
       int change = newSize - currentSize;
