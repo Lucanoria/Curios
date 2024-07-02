@@ -2,6 +2,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/TheIllusiveC4/Curios/blob/1.19.x/docs/CHANGELOG.md).
 
-## [1.19.2-5.1.6.2] - 2024.04.29
-### Added
-- Added `enableButton` configuration option [#362](https://github.com/TheIllusiveC4/Curios/issues/362)
+## [1.19.2-5.1.6.3] - 2024.07.02
+### Fixed
+- Fixed slot resizing crash [#426](https://github.com/TheIllusiveC4/Curios/issues/426)
