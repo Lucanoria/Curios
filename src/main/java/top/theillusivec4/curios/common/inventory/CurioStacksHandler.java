@@ -487,6 +487,7 @@ public class CurioStacksHandler implements ICurioStacksHandler {
 
   private void resize(int newSize) {
     int currentSize = this.getSlots();
+    newSize = Math.max(0, newSize);
 
     if (currentSize != newSize) {
       int change = newSize - currentSize;
