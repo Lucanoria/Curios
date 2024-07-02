@@ -50,7 +50,6 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.mixin.CuriosImplMixinHooks;
 
-@Debug(export = true)
 @Mixin(value = CuriosApi.class, remap = false)
 public class MixinCuriosApi {
 

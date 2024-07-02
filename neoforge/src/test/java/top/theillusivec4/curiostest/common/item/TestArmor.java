@@ -19,10 +19,9 @@ public class TestArmor extends ArmorItem {
     super(pMaterial, pType, pProperties);
   }
 
-  @Nonnull
   @Override
-  public ItemAttributeModifiers getAttributeModifiers(@Nonnull ItemStack stack) {
-    ItemAttributeModifiers modifiers = super.getAttributeModifiers(stack);
+  public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
+    ItemAttributeModifiers modifiers = super.getDefaultAttributeModifiers(stack);
     modifiers = CuriosApi.withSlotModifier(modifiers, "ring", ARMOR_UUID, 1,
         AttributeModifier.Operation.ADD_VALUE, EquipmentSlotGroup.bySlot(this.type.getSlot()));
     modifiers = CuriosApi.withSlotModifier(modifiers, "necklace", ARMOR_UUID, -3,

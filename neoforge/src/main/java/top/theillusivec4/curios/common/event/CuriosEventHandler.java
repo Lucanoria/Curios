@@ -158,8 +158,7 @@ public class CuriosEventHandler {
     return entityitem;
   }
 
-  private static boolean handleMending(Player player, IDynamicStackHandler stacks,
-                                       PlayerXpEvent.PickupXp evt) {
+  private static boolean handleMending(Player player, IDynamicStackHandler stacks, PlayerXpEvent.PickupXp evt) {
 
     var mendingHolder = player.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.MENDING);
     for (int i = 0; i < stacks.getSlots(); i++) {
@@ -264,7 +263,6 @@ public class CuriosEventHandler {
 
   @SubscribeEvent
   public void playerStartTracking(PlayerEvent.StartTracking evt) {
-
     Entity target = evt.getTarget();
     Player player = evt.getEntity();
 
@@ -279,7 +277,6 @@ public class CuriosEventHandler {
   public void playerClone(PlayerEvent.Clone evt) {
     Player player = evt.getEntity();
     Player oldPlayer = evt.getOriginal();
-    oldPlayer.revive();
     Optional<ICuriosItemHandler> oldHandler = CuriosApi.getCuriosInventory(oldPlayer);
     Optional<ICuriosItemHandler> newHandler = CuriosApi.getCuriosInventory(player);
     oldHandler.ifPresent(
@@ -288,7 +285,6 @@ public class CuriosEventHandler {
 
   @SubscribeEvent(priority = EventPriority.HIGHEST)
   public void playerDrops(LivingDropsEvent evt) {
-
     LivingEntity livingEntity = evt.getEntity();
 
     if (!livingEntity.isSpectator()) {
@@ -477,12 +473,13 @@ public class CuriosEventHandler {
 //      int bonusLevel = stack.getEnchantmentLevel(fortuneHolder);
 //      int silkLevel = stack.getEnchantmentLevel(silkTouchHolder);
       LevelAccessor level = evt.getLevel();
-      evt.setDroppedExperience(evt.getState().getExpDrop(level, level.getRandom(), evt.getPos())); // , bonusLevel + fortuneLevel.get(), silkLevel));
+      evt.setDroppedExperience(evt.getState().getExpDrop(level, evt.getPos(), evt.getBlockEntity(), evt.getBreaker(), evt.getTool()));
     }
   }
 
   @SubscribeEvent
   public void enderManAnger(final EnderManAngerEvent evt) {
+    // TODO investigate caching possibilities
     Player player = evt.getPlayer();
     CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
 
