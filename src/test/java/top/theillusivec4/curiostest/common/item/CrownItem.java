@@ -19,8 +19,10 @@
 
 package top.theillusivec4.curiostest.common.item;
 
+import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,6 +30,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.CuriosTooltip;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
@@ -56,6 +59,15 @@ public class CrownItem extends Item {
           stack.hurtAndBreak(1, livingEntity,
               damager -> CuriosApi.broadcastCurioBreakEvent(slotContext));
         }
+      }
+
+      @Override
+      public List<Component> getAttributesTooltip(List<Component> tooltips) {
+        return new CuriosTooltip()
+            .appendAdditive(Component.literal("test1"))
+            .appendSubtractive(Component.literal("test2"))
+            .forSlots(this.getStack())
+            .build();
       }
     });
   }
