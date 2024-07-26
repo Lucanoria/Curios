@@ -93,11 +93,21 @@ public class CurioSlot extends SlotItemHandler {
 
   @OnlyIn(Dist.CLIENT)
   public String getSlotName() {
+    StringBuilder builder = new StringBuilder();
 
     if (this.isCosmetic) {
-      return I18n.get("curios.cosmetic") + " " + I18n.get("curios.identifier." + this.identifier);
+      builder.append(I18n.get("curios.cosmetic")).append(" ");
     }
-    return I18n.get("curios.identifier." + this.identifier);
+    String key = "curios.identifier." + this.identifier;
+
+    if (I18n.exists(key)) {
+      builder.append(I18n.get(key));
+      return builder.toString();
+    }
+    builder
+        .append(Character.toUpperCase(this.identifier.charAt(0)))
+        .append(this.identifier.substring(1).toLowerCase());
+    return builder.toString();
   }
 
   @Override
