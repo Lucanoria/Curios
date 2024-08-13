@@ -454,9 +454,20 @@ public class CuriosEventHandler
         }
     }
 
+    static Map<UUID, Pair<Long, Boolean>> enderManMaskCache = new HashMap<>();
     @SubscribeEvent
     public void enderManAnger(final EnderManAngerEvent evt) {
+        // Check cached value first
+        if (enderManMaskCache.size() > 500) enderManMaskCache.clear();
         Player player = evt.getPlayer();
+        long gameTime = player.level().getGameTime();
+        if (enderManMaskCache.containsKey(player.getUUID())) {
+            var pair = enderManMaskCache.get(player.getUUID());
+            if (pair.getFirst() == gameTime) {
+                evt.setCanceled(pair.getSecond());
+                return;
+            }
+        }
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             all:
             for (Map.Entry<String, ICurioStacksHandler> entry : handler.getCurios().entrySet()) {
@@ -468,12 +479,14 @@ public class CuriosEventHandler
                     boolean hasMask = CuriosApi.getCurio(stacks.getStackInSlot(i)).map(curio -> curio.isEnderMask(new SlotContext(entry.getKey(), player, index, false, renderStates.size() > index && renderStates.get(index)), evt.getEntity())).orElse(false);
 
                     if (hasMask) {
+                        enderManMaskCache.put(player.getUUID(), Pair.of(gameTime, true));
                         evt.setCanceled(true);
                         break all;
                     }
                 }
             }
         });
+        enderManMaskCache.put(player.getUUID(), Pair.of(gameTime, false));
     }
 
     @SubscribeEvent

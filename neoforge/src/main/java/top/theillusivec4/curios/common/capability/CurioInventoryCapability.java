@@ -140,8 +140,18 @@ public class CurioInventoryCapability implements ICuriosItemHandler
         return findFirstCurio(stack -> stack.getItem() == item);
     }
 
+    static Map<Predicate<ItemStack>, Pair<Long, Optional<SlotResult>>> firstCurioCache = new HashMap<>();
     @Override
     public Optional<SlotResult> findFirstCurio(Predicate<ItemStack> filter) {
+        // Check cached value first
+        if (firstCurioCache.size() > 500) firstCurioCache.clear();
+        long gameTime = this.livingEntity.level().getGameTime();
+        if (firstCurioCache.containsKey(filter)) {
+            var pair = firstCurioCache.get(filter);
+            if (pair.getFirst() == gameTime) {
+                return pair.getSecond();
+            }
+        }
 
         Map<String, ICurioStacksHandler> curios = this.getCurios();
 
@@ -154,10 +164,13 @@ public class CurioInventoryCapability implements ICuriosItemHandler
 
                 if (!stack.isEmpty() && filter.test(stack)) {
                     NonNullList<Boolean> renderStates = stacksHandler.getRenders();
-                    return Optional.of(new SlotResult(new SlotContext(id, this.livingEntity, i, false, renderStates.size() > i && renderStates.get(i)), stack));
+                    var ret = Optional.of(new SlotResult(new SlotContext(id, this.livingEntity, i, false, renderStates.size() > i && renderStates.get(i)), stack));
+                    firstCurioCache.put(filter, Pair.of(gameTime, ret));
+                    return ret;
                 }
             }
         }
+        firstCurioCache.put(filter, Pair.of(gameTime, Optional.empty()));
         return Optional.empty();
     }
 
