@@ -171,9 +171,9 @@ public class CuriosUtilMixinHooks {
   }
 
   public static boolean containsStack(Player player, ItemStack stack) {
-    return CuriosApi.getCuriosInventory(player).map(inv -> inv.findFirstCurio(
-            stack2 -> !stack2.isEmpty() && ItemStack.isSameItemSameComponents(stack, stack2))
-        .isPresent()).orElse(false);
+    return CuriosApi.getCuriosInventory(player).map(
+            inv -> inv.findFirstCurio(stack2 -> !stack2.isEmpty() && ItemStack.isSameItemSameComponents(stack, stack2)).isPresent())
+        .orElse(false);
   }
 
   public static boolean containsTag(Player player, TagKey<Item> tagKey) {

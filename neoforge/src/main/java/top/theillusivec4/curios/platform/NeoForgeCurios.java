@@ -33,10 +33,8 @@ import top.theillusivec4.curios.platform.services.ICuriosPlatform;
 public class NeoForgeCurios implements ICuriosPlatform {
 
   @Override
-  public Map<String, ISlotType> getItemStackSlots(ItemStack stack,
-                                                  @Nullable LivingEntity livingEntity) {
-    return livingEntity != null ? CuriosApi.getItemStackSlots(stack, livingEntity) :
-        CuriosApi.getItemStackSlots(stack, true);
+  public Map<String, ISlotType> getItemStackSlots(ItemStack stack, @Nullable LivingEntity livingEntity) {
+    return livingEntity != null ? CuriosApi.getItemStackSlots(stack, livingEntity) : CuriosApi.getItemStackSlots(stack, true);
   }
 
   @Override

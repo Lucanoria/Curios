@@ -23,7 +23,6 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import javax.annotation.Nonnull;
 import net.minecraft.core.Holder;
 import net.minecraft.data.DataGenerator;
@@ -154,9 +153,7 @@ public class CuriosTest {
       }
 
       @Override
-      public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(
-          SlotContext slotContext,
-          UUID uuid) {
+      public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id) {
         Multimap<Holder<Attribute>, AttributeModifier> atts = LinkedHashMultimap.create();
         atts.put(Attributes.MOVEMENT_SPEED,
             new AttributeModifier(ResourceLocation.fromNamespaceAndPath(CuriosTest.MODID, "speed_bonus"), 0.1,
@@ -167,8 +164,8 @@ public class CuriosTest {
         atts.put(Attributes.KNOCKBACK_RESISTANCE,
             new AttributeModifier(ResourceLocation.fromNamespaceAndPath(CuriosTest.MODID, "knockback_resist"), 0.2,
                 AttributeModifier.Operation.ADD_VALUE));
-        CuriosApi.addSlotModifier(atts, "ring", 1, AttributeModifier.Operation.ADD_VALUE);
-//        CuriosApi.addSlotModifier(atts, "curio", uuid, -1, AttributeModifier.Operation.ADDITION);
+        CuriosApi.addSlotModifier(atts, "ring", id, 1, AttributeModifier.Operation.ADD_VALUE);
+        CuriosApi.addSlotModifier(atts, "curio", id, -1, AttributeModifier.Operation.ADD_VALUE);
         return atts;
       }
 
@@ -213,15 +210,13 @@ public class CuriosTest {
       }
 
       @Override
-      public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(
-          SlotContext slotContext,
-          UUID uuid) {
+      public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id) {
         Multimap<Holder<Attribute>, AttributeModifier> atts = LinkedHashMultimap.create();
         atts.put(Attributes.ATTACK_DAMAGE,
             new AttributeModifier(ResourceLocation.fromNamespaceAndPath(CuriosTest.MODID, "attack_damage_bonus"), 4,
                 AttributeModifier.Operation.ADD_VALUE));
-        CuriosApi.addSlotModifier(atts, "necklace", 2, AttributeModifier.Operation.ADD_VALUE);
-        CuriosApi.addSlotModifier(atts, "ring", -1, AttributeModifier.Operation.ADD_VALUE);
+        CuriosApi.addSlotModifier(atts, "necklace", id, 2, AttributeModifier.Operation.ADD_VALUE);
+        CuriosApi.addSlotModifier(atts, "ring", id, -1, AttributeModifier.Operation.ADD_VALUE);
         return atts;
       }
     }, CuriosTestRegistry.KNUCKLES.get());

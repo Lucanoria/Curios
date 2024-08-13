@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import net.minecraft.nbt.ListTag;
@@ -325,89 +324,4 @@ public interface ICuriosItemHandler {
    * modifiers are initially applied.
    */
   void clearCachedSlotModifiers();
-
-  // =============== DEPRECATED =================
-
-  /**
-   * @deprecated Lock states are no longer used
-   */
-  @Deprecated(forRemoval = true)
-  @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
-  default Set<String> getLockedSlots() {
-    return new HashSet<>();
-  }
-
-  /**
-   * @deprecated See {@link ICuriosItemHandler#addTransientSlotModifiers(Multimap)}
-   * and {@link ICuriosItemHandler#addPermanentSlotModifiers(Multimap)}
-   */
-  @Deprecated(forRemoval = true)
-  @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
-  default void unlockSlotType(String identifier, int amount, boolean visible, boolean cosmetic) {
-    growSlotType(identifier, amount);
-  }
-
-  /**
-   * @deprecated See {@link ICuriosItemHandler#addTransientSlotModifiers(Multimap)}
-   * and {@link ICuriosItemHandler#addPermanentSlotModifiers(Multimap)}
-   */
-  @Deprecated(forRemoval = true)
-  @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
-  default void lockSlotType(String identifier) {
-    shrinkSlotType(identifier, 1);
-  }
-
-  /**
-   * @deprecated Lock states are no longer used
-   */
-  @Deprecated(forRemoval = true)
-  @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
-  default void processSlots() {
-    // NO-OP
-  }
-
-  /**
-   * @deprecated See {@link ICuriosItemHandler#getFortuneLevel(LootContext)}
-   */
-  @Deprecated(forRemoval = true)
-  @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
-  default int getFortuneBonus() {
-    return 0;
-  }
-
-  /**
-   * @deprecated See {@link ICuriosItemHandler#getLootingLevel(DamageSource, LivingEntity, int)}
-   */
-  @Deprecated(forRemoval = true)
-  @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
-  default int getLootingBonus() {
-    return 0;
-  }
-
-
-  /**
-   * @deprecated See {@link ICuriosItemHandler#getLootingLevel(DamageSource, LivingEntity, int)} and
-   * {@link ICuriosItemHandler#getFortuneLevel(LootContext)}
-   */
-  @Deprecated(forRemoval = true)
-  @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
-  default void setEnchantmentBonuses(Tuple<Integer, Integer> fortuneAndLooting) {
-    // NO-OP
-  }
-
-  /**
-   * @deprecated See {@link ICuriosItemHandler#addTransientSlotModifiers(Multimap)}
-   * and {@link ICuriosItemHandler#addPermanentSlotModifiers(Multimap)}
-   */
-  @Deprecated(forRemoval = true)
-  @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
-  void growSlotType(String identifier, int amount);
-
-  /**
-   * @deprecated See {@link ICuriosItemHandler#addTransientSlotModifiers(Multimap)}
-   * and {@link ICuriosItemHandler#addPermanentSlotModifiers(Multimap)}
-   */
-  @Deprecated(forRemoval = true)
-  @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
-  void shrinkSlotType(String identifier, int amount);
 }

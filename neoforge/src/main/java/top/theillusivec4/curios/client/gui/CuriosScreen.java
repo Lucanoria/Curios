@@ -28,6 +28,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
@@ -53,7 +54,7 @@ import top.theillusivec4.curios.common.inventory.container.CuriosContainer;
 import top.theillusivec4.curios.common.network.client.CPacketPage;
 import top.theillusivec4.curios.common.network.client.CPacketToggleRender;
 
-public class CuriosScreen extends EffectRenderingInventoryScreen<CuriosContainer>
+public class CuriosScreen extends AbstractContainerScreen<CuriosContainer>
     implements RecipeUpdateListener, ICuriosScreen {
 
   static final ResourceLocation CURIO_INVENTORY = ResourceLocation.fromNamespaceAndPath(CuriosConstants.MOD_ID, "textures/gui/curios/inventory.png");

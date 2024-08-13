@@ -28,6 +28,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -134,8 +135,23 @@ public interface ICurio
      * @param uuid        Slot-unique UUID
      * @return A map of attribute modifiers to apply
      */
-    default Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(
-            SlotContext slotContext, UUID uuid) {
+    @Deprecated(forRemoval = true, since = "1.21")
+    default Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid) {
+        return LinkedHashMultimap.create();
+    }
+
+    /**
+     * Retrieves a map of attribute modifiers for the curio.
+     * <br>
+     * Note that only the identifier is guaranteed to be present in the slot context. For instances
+     * where the ItemStack may not be in a curio slot, such as when retrieving item tooltips, the
+     * index is -1 and the wearer may be null.
+     *
+     * @param slotContext Context about the slot that the ItemStack is in
+     * @param id        Slot-unique ID
+     * @return A map of attribute modifiers to apply
+     */
+    default Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id) {
         return LinkedHashMultimap.create();
     }
 
@@ -239,7 +255,7 @@ public interface ICurio
 
     /**
      * Retrieves a list of tooltips when displaying curio attribute modifier information returned by
-     * {@link ICurio#getAttributeModifiers(SlotContext, UUID)}. By default, this will display a list
+     * {@link ICurio#getAttributeModifiers(SlotContext, ResourceLocation)}. By default, this will display a list
      * similar to the vanilla attribute modifier tooltips.
      *
      * @param tooltips A list of {@link Component} with the attribute modifier information

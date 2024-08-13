@@ -174,7 +174,7 @@ public class CuriosImplMixinHooks {
     return false;
   }
 
-  public static Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack) {
+  public static Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
     Multimap<Holder<Attribute>, AttributeModifier> multimap = LinkedHashMultimap.create();
     CurioAttributeModifiers attributemodifiers = stack.getOrDefault(CuriosRegistry.CURIO_ATTRIBUTE_MODIFIERS, CurioAttributeModifiers.EMPTY);
 
@@ -187,48 +187,44 @@ public class CuriosImplMixinHooks {
           AttributeModifier attributeModifier = modifier.modifier();
 
           if (rl != null) {
+            AttributeModifier.Operation operation = attributeModifier.operation();
+            double amount = attributeModifier.amount();
 
-            if (uuid.getLeastSignificantBits() != 0L && uuid.getMostSignificantBits() != 0L) {
-              AttributeModifier.Operation operation = attributeModifier.operation();
-              double amount = attributeModifier.amount();
-              ResourceLocation name = attributeModifier.id();
+            if (rl.getNamespace().equals("curios")) {
+              String identifier1 = rl.getPath();
+              LivingEntity livingEntity = slotContext.entity();
+              boolean clientSide = livingEntity == null || livingEntity.level().isClientSide();
 
-              if (rl.getNamespace().equals("curios")) {
-                String identifier1 = rl.getPath();
-                LivingEntity livingEntity = slotContext.entity();
-                boolean clientSide = livingEntity == null || livingEntity.level().isClientSide();
+              if (CuriosApi.getSlot(identifier1, clientSide).isPresent()) {
+                CuriosApi.addSlotModifier(multimap, identifier1, id, amount, operation);
+              }
+            } else {
+              Holder<Attribute> attribute = BuiltInRegistries.ATTRIBUTE.getHolder(rl).orElse(null);
 
-                if (CuriosApi.getSlot(identifier1, clientSide).isPresent()) {
-                  CuriosApi.addSlotModifier(multimap, identifier1, amount, operation);
-                }
-              } else {
-                Holder<Attribute> attribute = BuiltInRegistries.ATTRIBUTE.getHolder(rl).orElse(null);
-
-                if (attribute != null) {
-                  multimap.put(attribute, new AttributeModifier(name, amount, operation));
-                }
+              if (attribute != null) {
+                multimap.put(attribute, new AttributeModifier(id, amount, operation));
               }
             }
           }
         }
       }
     } else {
-      multimap = getCurio(stack).map(curio -> curio.getAttributeModifiers(slotContext, uuid)).orElse(multimap);
+      multimap = getCurio(stack).map(curio -> curio.getAttributeModifiers(slotContext, id)).orElse(multimap);
     }
-    CurioAttributeModifierEvent evt = new CurioAttributeModifierEvent(stack, slotContext, uuid, multimap);
+    CurioAttributeModifierEvent evt = new CurioAttributeModifierEvent(stack, slotContext, id, multimap);
     NeoForge.EVENT_BUS.post(evt);
     return LinkedHashMultimap.create(evt.getModifiers());
   }
 
-  public static void addSlotModifier(Multimap<Holder<Attribute>, AttributeModifier> map, String identifier, double amount, AttributeModifier.Operation operation) {
-    map.put(SlotAttribute.getOrCreate(identifier), new AttributeModifier(ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, identifier), amount, operation));
+  public static void addSlotModifier(Multimap<Holder<Attribute>, AttributeModifier> map, String identifier, ResourceLocation id, double amount, AttributeModifier.Operation operation) {
+    map.put(SlotAttribute.getOrCreate(identifier), new AttributeModifier(id, amount, operation));
   }
 
-  public static void addSlotModifier(ItemStack stack, String identifier, String name, double amount, AttributeModifier.Operation operation, String slot) {
-    addModifier(stack, SlotAttribute.getOrCreate(identifier), name, amount, operation, slot);
+  public static void addSlotModifier(ItemStack stack, String identifier, ResourceLocation id, double amount, AttributeModifier.Operation operation, String slot) {
+    addModifier(stack, SlotAttribute.getOrCreate(identifier), id, amount, operation, slot);
   }
 
-  public static void addModifier(ItemStack stack, Holder<Attribute> attribute, String name, double amount, AttributeModifier.Operation operation, String slot) {
+  public static void addModifier(ItemStack stack, Holder<Attribute> attribute, ResourceLocation id, double amount, AttributeModifier.Operation operation, String slot) {
     ResourceLocation rl;
 
     if (attribute.value() instanceof SlotAttribute wrapper) {
@@ -237,8 +233,7 @@ public class CuriosImplMixinHooks {
       rl = BuiltInRegistries.ATTRIBUTE.getKey(attribute.value());
     }
 
-    AttributeModifier attributeModifier = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, name), amount, operation);
-    CurioAttributeModifiers.Entry entry = new CurioAttributeModifiers.Entry(rl, attributeModifier, slot);
+    CurioAttributeModifiers.Entry entry = new CurioAttributeModifiers.Entry(rl, new AttributeModifier(id, amount, operation), slot);
     CurioAttributeModifiers curioAttributeModifiers =
         stack.getOrDefault(CuriosRegistry.CURIO_ATTRIBUTE_MODIFIERS, CurioAttributeModifiers.EMPTY);
     List<CurioAttributeModifiers.Entry> list = new ArrayList<>(curioAttributeModifiers.modifiers());
@@ -258,9 +253,9 @@ public class CuriosImplMixinHooks {
 
   private static final Map<String, UUID> UUIDS = new HashMap<>();
 
-  public static UUID getSlotUuid(SlotContext slotContext) {
+  public static ResourceLocation getSlotId(SlotContext slotContext) {
     String key = slotContext.identifier() + slotContext.index();
-    return UUIDS.computeIfAbsent(key, (k) -> UUID.nameUUIDFromBytes(k.getBytes()));
+    return ResourceLocation.fromNamespaceAndPath(CuriosConstants.MOD_ID, key);
   }
 
 

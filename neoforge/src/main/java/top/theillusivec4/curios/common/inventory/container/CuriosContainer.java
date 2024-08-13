@@ -530,8 +530,7 @@ public class CuriosContainer extends RecipeBookMenu<CraftingInput, CraftingRecip
       this.moveToPage = -1;
 
       if (!this.isLocalWorld) {
-        PacketDistributor.sendToPlayer((ServerPlayer) this.player,
-            new SPacketQuickMove(this.containerId, this.moveFromIndex));
+        PacketDistributor.sendToPlayer((ServerPlayer) this.player, new SPacketQuickMove(this.containerId, this.moveFromIndex));
       }
     }
   }

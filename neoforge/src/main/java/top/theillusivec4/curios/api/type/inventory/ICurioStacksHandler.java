@@ -24,12 +24,10 @@ import com.google.common.collect.Multimap;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
 public interface ICurioStacksHandler {
@@ -224,26 +222,4 @@ public interface ICurioStacksHandler {
    * @param tag The data represented as a {@link CompoundTag}
    */
   void applySyncTag(CompoundTag tag);
-
-  // ============ DEPRECATED ================
-
-  /**
-   * @deprecated See {@link ICurioStacksHandler#getModifiers()}
-   */
-  @Deprecated
-  int getSizeShift();
-
-  /**
-   * @deprecated See {@link top.theillusivec4.curios.api.type.capability.ICuriosItemHandler#addTransientSlotModifiers(Multimap)}
-   * and {@link top.theillusivec4.curios.api.type.capability.ICuriosItemHandler#addPermanentSlotModifiers(Multimap)}
-   */
-  @Deprecated
-  void grow(int amount);
-
-  /**
-   * @deprecated See {@link top.theillusivec4.curios.api.type.capability.ICuriosItemHandler#addTransientSlotModifiers(Multimap)}
-   * and {@link top.theillusivec4.curios.api.type.capability.ICuriosItemHandler#addPermanentSlotModifiers(Multimap)}
-   */
-  @Deprecated
-  void shrink(int amount);
 }

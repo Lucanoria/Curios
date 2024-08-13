@@ -29,20 +29,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSources;
-import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -57,7 +52,6 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import top.theillusivec4.curios.Curios;
 import top.theillusivec4.curios.CuriosConstants;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotAttribute;
@@ -179,7 +173,7 @@ public class ClientEventHandler {
         List<Component> attributeTooltip = new ArrayList<>();
 
         for (String identifier : slots) {
-          Multimap<Holder<Attribute>, AttributeModifier> multimap = CuriosApi.getAttributeModifiers(new SlotContext(identifier, player, 0, false, true), UUID.randomUUID(), stack);
+          Multimap<Holder<Attribute>, AttributeModifier> multimap = CuriosApi.getAttributeModifiers(new SlotContext(identifier, player, 0, false, true), ResourceLocation.fromNamespaceAndPath(CuriosConstants.MOD_ID, identifier), stack);
 
           if (!multimap.isEmpty()) {
             boolean init = false;

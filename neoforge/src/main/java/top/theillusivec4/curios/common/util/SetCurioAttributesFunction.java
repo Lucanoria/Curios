@@ -31,15 +31,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.PrimitiveCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.function.Function;
 import javax.annotation.Nonnull;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
@@ -64,11 +61,8 @@ public class SetCurioAttributesFunction extends LootItemConditionalFunction {
       instance -> commonFields(instance)
           .and(
               instance.group(
-                  ExtraCodecs.nonEmptyList(Modifier.MODIFIER_CODEC.listOf())
-                      .fieldOf("modifiers")
-                      .forGetter(function -> function.modifiers),
-                  Codec.BOOL.optionalFieldOf("replace", Boolean.TRUE)
-                      .forGetter(function -> function.replace)
+                  ExtraCodecs.nonEmptyList(Modifier.MODIFIER_CODEC.listOf()).fieldOf("modifiers").forGetter(function -> function.modifiers),
+                  Codec.BOOL.optionalFieldOf("replace", Boolean.TRUE).forGetter(function -> function.replace)
               )
           )
           .apply(instance, SetCurioAttributesFunction::new)
@@ -108,20 +102,18 @@ public class SetCurioAttributesFunction extends LootItemConditionalFunction {
     RandomSource random = context.getRandom();
 
     for (Modifier modifier : this.modifiers) {
-      UUID uuid = modifier.id.orElse(null);
       String slot = Util.getRandom(modifier.slots, random);
 
       if (modifier.attribute.value() instanceof SlotAttribute wrapper) {
-        CuriosApi.addSlotModifier(stack, wrapper.getIdentifier(), modifier.name, modifier.amount.getFloat(context), modifier.operation, slot);
+        CuriosApi.addSlotModifier(stack, wrapper.getIdentifier(), modifier.id, modifier.amount.getFloat(context), modifier.operation, slot);
       } else {
-        CuriosApi.addModifier(stack, modifier.attribute, modifier.name, modifier.amount.getFloat(context), modifier.operation, slot);
+        CuriosApi.addModifier(stack, modifier.attribute, modifier.id, modifier.amount.getFloat(context), modifier.operation, slot);
       }
     }
     return stack;
   }
 
-  record Modifier(String name, Holder<Attribute> attribute, AttributeModifier.Operation operation,
-                  NumberProvider amount, Optional<UUID> id, List<String> slots) {
+  record Modifier(String name, Holder<Attribute> attribute, AttributeModifier.Operation operation, NumberProvider amount, ResourceLocation id, List<String> slots) {
 
     private static final Codec<List<String>> SLOTS_CODEC = ExtraCodecs.nonEmptyList(
         Codec.either(Codec.STRING, Codec.list(Codec.STRING))
@@ -167,18 +159,12 @@ public class SetCurioAttributesFunction extends LootItemConditionalFunction {
     };
     public static final Codec<Modifier> MODIFIER_CODEC =
         RecordCodecBuilder.create((instance) -> instance.group(
-                Codec.STRING.fieldOf("name")
-                    .forGetter(Modifier::name),
-                ATTRIBUTE_CODEC.fieldOf("attribute")
-                    .forGetter(Modifier::attribute),
-                AttributeModifier.Operation.CODEC.fieldOf("operation")
-                    .forGetter(Modifier::operation),
-                NumberProviders.CODEC.fieldOf("amount")
-                    .forGetter(Modifier::amount),
-                UUIDUtil.STRING_CODEC.optionalFieldOf("id")
-                    .forGetter(Modifier::id),
-                SLOTS_CODEC.fieldOf("slot")
-                    .forGetter(Modifier::slots))
+                Codec.STRING.fieldOf("name").forGetter(Modifier::name),
+                ATTRIBUTE_CODEC.fieldOf("attribute").forGetter(Modifier::attribute),
+                AttributeModifier.Operation.CODEC.fieldOf("operation").forGetter(Modifier::operation),
+                NumberProviders.CODEC.fieldOf("amount").forGetter(Modifier::amount),
+                ResourceLocation.CODEC.fieldOf("id").forGetter(Modifier::id),
+                SLOTS_CODEC.fieldOf("slot").forGetter(Modifier::slots))
             .apply(instance, Modifier::new));
   }
 }

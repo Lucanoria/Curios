@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -58,7 +57,7 @@ import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 public class CurioStacksHandler implements ICurioStacksHandler {
 
-  private static final ResourceLocation LEGACY_UUID = ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, "legacy");
+  private static final ResourceLocation LEGACY_ID = ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, "legacy");
 
   private final ICuriosItemHandler itemHandler;
   private final String identifier;
@@ -136,11 +135,6 @@ public class CurioStacksHandler implements ICurioStacksHandler {
   }
 
   @Override
-  public int getSizeShift() {
-    return 0;
-  }
-
-  @Override
   public boolean isVisible() {
     return this.visible;
   }
@@ -150,29 +144,11 @@ public class CurioStacksHandler implements ICurioStacksHandler {
     return this.cosmetic;
   }
 
-  @Override
-  public void grow(int amount) {
-    amount = Math.max(0, amount);
-
-    if (amount > 0) {
-      this.addLegacyChange(amount);
-    }
-  }
-
-  @Override
-  public void shrink(int amount) {
-    amount = Math.max(0, amount);
-
-    if (amount > 0) {
-      this.addLegacyChange(Math.min(this.getSlots(), amount) * -1);
-    }
-  }
-
   private void addLegacyChange(int shift) {
-    AttributeModifier mod = this.getModifiers().get(LEGACY_UUID);
+    AttributeModifier mod = this.getModifiers().get(LEGACY_ID);
     int current = mod != null ? (int) mod.amount() : 0;
     current += shift;
-    AttributeModifier newModifier = new AttributeModifier(LEGACY_UUID, current, AttributeModifier.Operation.ADD_VALUE);
+    AttributeModifier newModifier = new AttributeModifier(LEGACY_ID, current, AttributeModifier.Operation.ADD_VALUE);
     this.modifiers.put(newModifier.id(), newModifier);
     Collection<AttributeModifier> modifiers =
         this.getModifiersByOperation(newModifier.operation());
@@ -220,7 +196,7 @@ public class CurioStacksHandler implements ICurioStacksHandler {
 
     if (!this.modifiers.isEmpty()) {
       ListTag list = new ListTag();
-      this.modifiers.forEach((uuid, modifier) -> {
+      this.modifiers.forEach((id, modifier) -> {
         if (!this.persistentModifiers.contains(modifier)) {
           list.add(modifier.save());
         }
@@ -264,13 +240,6 @@ public class CurioStacksHandler implements ICurioStacksHandler {
       }
     }
 
-    if (nbt.contains("SizeShift")) {
-      int sizeShift = nbt.getInt("SizeShift");
-
-      if (sizeShift != 0) {
-        this.addLegacyChange(sizeShift);
-      }
-    }
     this.cosmetic = nbt.contains("HasCosmetic") ? nbt.getBoolean("HasCosmetic") : this.cosmetic;
     this.visible = nbt.contains("Visible") ? nbt.getBoolean("Visible") : this.visible;
     this.canToggleRender =
@@ -382,13 +351,6 @@ public class CurioStacksHandler implements ICurioStacksHandler {
       }
     }
 
-    if (tag.contains("SizeShift")) {
-      int sizeShift = tag.getInt("SizeShift");
-
-      if (sizeShift != 0) {
-        this.addLegacyChange(sizeShift);
-      }
-    }
     this.cosmetic = tag.contains("HasCosmetic") ? tag.getBoolean("HasCosmetic") : this.cosmetic;
     this.visible = tag.contains("Visible") ? tag.getBoolean("Visible") : this.visible;
     this.canToggleRender =
@@ -423,7 +385,7 @@ public class CurioStacksHandler implements ICurioStacksHandler {
     this.cachedModifiers.clear();
     this.modifiersByOperation.clear();
     this.persistentModifiers.clear();
-    other.getModifiers().forEach((uuid, modifier) -> this.addTransientModifier(modifier));
+    other.getModifiers().forEach((id, modifier) -> this.addTransientModifier(modifier));
     this.cachedModifiers.addAll(other.getCachedModifiers());
 
     for (AttributeModifier persistentModifier : other.getPermanentModifiers()) {
@@ -581,9 +543,9 @@ public class CurioStacksHandler implements ICurioStacksHandler {
       SlotContext slotContext = new SlotContext(identifier, entity, i, false, this.visible);
 
       if (!stack.isEmpty()) {
-        UUID uuid = CuriosApi.getSlotUuid(slotContext);
+        ResourceLocation id = CuriosApi.getSlotId(slotContext);
         Multimap<Holder<Attribute>, AttributeModifier> map =
-            CuriosApi.getAttributeModifiers(slotContext, uuid, stack);
+            CuriosApi.getAttributeModifiers(slotContext, id, stack);
         Multimap<String, AttributeModifier> slots = HashMultimap.create();
         Set<Holder<Attribute>> toRemove = new HashSet<>();
         AttributeMap attributeMap = entity.getAttributes();

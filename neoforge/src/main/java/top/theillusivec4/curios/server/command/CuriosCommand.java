@@ -182,15 +182,16 @@ public class CuriosCommand {
   }
 
   private static int growSlotForPlayer(CommandSourceStack source, ServerPlayer playerMP, String slot, int amount) {
-    CuriosApi.getSlotHelper().growSlotType(slot, amount, playerMP);
+    // TODO use slot modifiers
+//    CuriosApi.getSlotHelper().growSlotType(slot, amount, playerMP);
     source.sendSuccess(() -> Component.translatable("commands.curios.add.success", amount, slot,
         playerMP.getDisplayName()), true);
     return Command.SINGLE_SUCCESS;
   }
 
-  private static int shrinkSlotForPlayer(CommandSourceStack source, ServerPlayer playerMP,
-                                         String slot, int amount) {
-    CuriosApi.getSlotHelper().shrinkSlotType(slot, amount, playerMP);
+  private static int shrinkSlotForPlayer(CommandSourceStack source, ServerPlayer playerMP, String slot, int amount) {
+    // TODO use slot modifiers
+//    CuriosApi.getSlotHelper().shrinkSlotType(slot, amount, playerMP);
     source.sendSuccess(() -> Component.translatable("commands.curios.remove.success", amount, slot,
         playerMP.getDisplayName()), true);
     return Command.SINGLE_SUCCESS;

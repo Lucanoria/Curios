@@ -22,11 +22,11 @@ package top.theillusivec4.curios.common.capability;
 
 import com.google.common.collect.Multimap;
 import java.util.List;
-import java.util.UUID;
 import javax.annotation.Nonnull;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -111,16 +111,13 @@ public class ItemizedCurioCapability implements ICurio {
   }
 
   @Override
-  public int getLootingLevel(SlotContext slotContext, DamageSource source, LivingEntity target,
-                             int baseLooting) {
-    return this.curioItem
-        .getLootingLevel(slotContext, source, target, baseLooting, this.getStack());
+  public int getLootingLevel(SlotContext slotContext, DamageSource source, LivingEntity target, int baseLooting) {
+    return this.curioItem.getLootingLevel(slotContext, source, target, baseLooting, this.getStack());
   }
 
   @Override
-  public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(
-      SlotContext slotContext, UUID uuid) {
-    return this.curioItem.getAttributeModifiers(slotContext, uuid, this.getStack());
+  public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id) {
+      return this.curioItem.getAttributeModifiers(slotContext, id, this.getStack());
   }
 
   @Override

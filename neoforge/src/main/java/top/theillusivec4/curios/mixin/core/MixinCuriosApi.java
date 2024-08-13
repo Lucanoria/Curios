@@ -24,7 +24,6 @@ import com.google.common.collect.Multimap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.function.Predicate;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
@@ -34,13 +33,11 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import top.theillusivec4.curios.CuriosConstants;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.SlotResult;
@@ -101,34 +98,34 @@ public class MixinCuriosApi {
   }
 
   @Inject(at = @At("HEAD"), method = "getAttributeModifiers", cancellable = true)
-  private static void curios$getAttributeModifiers(SlotContext slotContext, UUID uuid,
+  private static void curios$getAttributeModifiers(SlotContext slotContext, ResourceLocation id,
                                                    ItemStack stack,
                                                    CallbackInfoReturnable<Multimap<Holder<Attribute>, AttributeModifier>> cir) {
-    cir.setReturnValue(CuriosImplMixinHooks.getAttributeModifiers(slotContext, uuid, stack));
+    cir.setReturnValue(CuriosImplMixinHooks.getAttributeModifiers(slotContext, id, stack));
   }
 
-  @Inject(at = @At("HEAD"), method = "addSlotModifier(Lcom/google/common/collect/Multimap;Ljava/lang/String;DLnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;)V", cancellable = true)
+  @Inject(at = @At("HEAD"), method = "addSlotModifier(Lcom/google/common/collect/Multimap;Ljava/lang/String;Lnet/minecraft/resources/ResourceLocation;DLnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;)V", cancellable = true)
   private static void curios$addSlotModifier(Multimap<Holder<Attribute>, AttributeModifier> map,
-                                             String identifier, double amount,
+                                             String identifier, ResourceLocation id, double amount,
                                              AttributeModifier.Operation operation,
                                              CallbackInfo ci) {
-    CuriosImplMixinHooks.addSlotModifier(map, identifier, amount, operation);
+    CuriosImplMixinHooks.addSlotModifier(map, identifier, id, amount, operation);
     ci.cancel();
   }
 
-  @Inject(at = @At("HEAD"), method = "addSlotModifier(Lnet/minecraft/world/item/ItemStack;Ljava/lang/String;Ljava/lang/String;DLnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;Ljava/lang/String;)V", cancellable = true)
-  private static void curios$addSlotModifier(ItemStack stack, String identifier, String name, double amount,
+  @Inject(at = @At("HEAD"), method = "addSlotModifier(Lnet/minecraft/world/item/ItemStack;Ljava/lang/String;Ljava/lang/String;Lnet/minecraft/resources/ResourceLocation;DLnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;Ljava/lang/String;)V", cancellable = true)
+  private static void curios$addSlotModifier(ItemStack stack, String identifier, ResourceLocation id, double amount,
                                              AttributeModifier.Operation operation, String slot,
                                              CallbackInfo ci) {
-    CuriosImplMixinHooks.addSlotModifier(stack, identifier, name, amount, operation, slot);
+    CuriosImplMixinHooks.addSlotModifier(stack, identifier, id, amount, operation, slot);
     ci.cancel();
   }
 
   @Inject(at = @At("HEAD"), method = "addModifier", cancellable = true)
-  private static void curios$addModifier(ItemStack stack, Holder<Attribute> attribute, String name, double amount,
+  private static void curios$addModifier(ItemStack stack, Holder<Attribute> attribute, ResourceLocation id, double amount,
                                          AttributeModifier.Operation operation, String slot,
                                          CallbackInfo ci) {
-    CuriosImplMixinHooks.addModifier(stack, attribute, name, amount, operation, slot);
+    CuriosImplMixinHooks.addModifier(stack, attribute, id, amount, operation, slot);
     ci.cancel();
   }
 
@@ -159,9 +156,9 @@ public class MixinCuriosApi {
     ci.setReturnValue(CuriosImplMixinHooks.testCurioPredicates(predicates, slotResult));
   }
 
-  @Inject(at = @At("HEAD"), method = "getSlotUuid", cancellable = true)
-  private static void curios$getUuid(SlotContext slotContext, CallbackInfoReturnable<UUID> ci) {
-    ci.setReturnValue(CuriosImplMixinHooks.getSlotUuid(slotContext));
+  @Inject(at = @At("HEAD"), method = "getSlotId", cancellable = true)
+  private static void curios$getId(SlotContext slotContext, CallbackInfoReturnable<ResourceLocation> ci) {
+    ci.setReturnValue(CuriosImplMixinHooks.getSlotId(slotContext));
   }
 
   @Inject(at = @At("HEAD"), method = "broadcastCurioBreakEvent", cancellable = true)

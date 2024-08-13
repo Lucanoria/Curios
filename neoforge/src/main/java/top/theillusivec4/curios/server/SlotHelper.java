@@ -66,88 +66,17 @@ public class SlotHelper implements ISlotHelper {
   }
 
   @Override
-  public SortedMap<ISlotType, ICurioStacksHandler> createSlots() {
-    SortedMap<ISlotType, ICurioStacksHandler> curios = new TreeMap<>();
-    this.getSlotTypes().forEach(type -> curios.put(type,
-        new CurioStacksHandler(null, type.getIdentifier(), type.getSize(), type.isVisible(),
-            type.hasCosmetic(), type.canToggleRendering(), type.getDropRule())));
-    return curios;
-  }
-
-  @Override
-  public SortedMap<ISlotType, ICurioStacksHandler> createSlots(LivingEntity livingEntity) {
-    SortedMap<ISlotType, ICurioStacksHandler> curios = new TreeMap<>();
-    CuriosApi.getCuriosHelper().getCuriosHandler(livingEntity).ifPresent(
-        handler -> this.getSlotTypes().forEach(type -> curios.put(type,
-            new CurioStacksHandler(handler, type.getIdentifier(), type.getSize(), type.isVisible(),
-                type.hasCosmetic(), type.canToggleRendering(), type.getDropRule()))));
-    return curios;
-  }
-
-  @Override
   public Set<String> getSlotTypeIds() {
     return Collections.unmodifiableSet(idToType.keySet());
   }
 
   @Override
   public int getSlotsForType(@Nonnull final LivingEntity livingEntity, String identifier) {
-    return CuriosApi.getCuriosHelper().getCuriosHandler(livingEntity).map(
-        handler -> handler.getStacksHandler(identifier).map(ICurioStacksHandler::getSlots)
-            .orElse(0)).orElse(0);
+    return 0;
   }
 
   @Override
   public void setSlotsForType(String id, final LivingEntity livingEntity, int amount) {
-    int difference = amount - getSlotsForType(livingEntity, id);
-
-    if (difference > 0) {
-      growSlotType(id, difference, livingEntity);
-    } else if (difference < 0) {
-      shrinkSlotType(id, Math.abs(difference), livingEntity);
-    }
-  }
-
-  @Override
-  public void growSlotType(String id, final LivingEntity livingEntity) {
-    growSlotType(id, 1, livingEntity);
-  }
-
-  @Override
-  public void growSlotType(String id, int amount, final LivingEntity livingEntity) {
-    CuriosApi.getCuriosHelper().getCuriosHandler(livingEntity)
-        .ifPresent(handler -> handler.growSlotType(id, amount));
-  }
-
-  @Override
-  public void shrinkSlotType(String id, final LivingEntity livingEntity) {
-    shrinkSlotType(id, 1, livingEntity);
-  }
-
-  @Override
-  public void shrinkSlotType(String id, int amount, final LivingEntity livingEntity) {
-    CuriosApi.getCuriosHelper().getCuriosHandler(livingEntity)
-        .ifPresent(handler -> handler.shrinkSlotType(id, amount));
-  }
-
-  @Override
-  public void unlockSlotType(String id, LivingEntity livingEntity) {
-    CuriosApi.getCuriosHelper().getCuriosHandler(livingEntity).ifPresent(handler -> {
-
-      if (handler.getStacksHandler(id).map(stacksHandler -> stacksHandler.getSlots() == 0)
-          .orElse(false)) {
-        handler.growSlotType(id, 1);
-      }
-    });
-  }
-
-  @Override
-  public void lockSlotType(String id, LivingEntity livingEntity) {
-    CuriosApi.getCuriosHelper().getCuriosHandler(livingEntity).ifPresent(handler -> {
-      int amount = handler.getStacksHandler(id).map(ICurioStacksHandler::getSlots).orElse(0);
-
-      if (amount > 0) {
-        handler.shrinkSlotType(id, amount);
-      }
-    });
+    // no op
   }
 }

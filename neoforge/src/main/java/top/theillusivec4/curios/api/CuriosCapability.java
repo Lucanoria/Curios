@@ -40,9 +40,7 @@ public class CuriosCapability {
    * A wrapper capability based on {@link IItemHandler} to provide access to curios inventory
    * without any dependency
    */
-  public static final EntityCapability<IItemHandler, Void> ITEM_HANDLER =
-      EntityCapability.createVoid(ID_ITEM_HANDLER, IItemHandler.class);
+  public static final EntityCapability<IItemHandler, Void> ITEM_HANDLER = EntityCapability.createVoid(ID_ITEM_HANDLER, IItemHandler.class);
 
-  public static final ItemCapability<ICurio, Void> ITEM =
-      ItemCapability.createVoid(ID_ITEM, ICurio.class);
+  public static final ItemCapability<ICurio, Void> ITEM = ItemCapability.createVoid(ID_ITEM, ICurio.class);
 }
