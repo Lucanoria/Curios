@@ -147,6 +147,15 @@ public interface ICuriosItemHandler {
   Optional<SlotResult> findFirstCurio(Predicate<ItemStack> filter);
 
   /**
+   * Gets the first matching item equipped in a curio slot that matches the filter.
+   *
+   * @param filter The filter to test against
+   * @param cacheKey A cache key for improved performance when doing lots of lookups in the same tick
+   * @return An optional {@link SlotResult} with the found item, or empty if none were found
+   */
+  Optional<SlotResult> findFirstCurio(Predicate<ItemStack> filter, String cacheKey);
+
+  /**
    * Gets all matching items equipped in a curio slot.
    *
    * @param item The item to search for

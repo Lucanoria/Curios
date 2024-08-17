@@ -26,6 +26,8 @@ import com.mojang.datafixers.types.templates.TypeTemplate;
 import com.mojang.datafixers.util.Pair;
 import java.util.Map;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.TypedDataComponent;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -171,14 +173,15 @@ public class CuriosUtilMixinHooks {
   }
 
   public static boolean containsStack(Player player, ItemStack stack) {
+    String cacheKey = BuiltInRegistries.ITEM.getKey(stack.getItem()).toString() + (!stack.getComponents().isEmpty() ? stack.getComponents().stream().map(TypedDataComponent::toString).reduce((s, s2) -> s + s2) : "");
     return CuriosApi.getCuriosInventory(player).map(
-            inv -> inv.findFirstCurio(stack2 -> !stack2.isEmpty() && ItemStack.isSameItemSameComponents(stack, stack2)).isPresent())
+            inv -> inv.findFirstCurio(stack2 -> !stack2.isEmpty() && ItemStack.isSameItemSameComponents(stack, stack2), cacheKey).isPresent())
         .orElse(false);
   }
 
   public static boolean containsTag(Player player, TagKey<Item> tagKey) {
     return CuriosApi.getCuriosInventory(player).map(
-            inv -> inv.findFirstCurio(stack2 -> !stack2.isEmpty() && stack2.is(tagKey)).isPresent())
+            inv -> inv.findFirstCurio(stack2 -> !stack2.isEmpty() && stack2.is(tagKey), tagKey.location().toString()).isPresent())
         .orElse(false);
   }
 }
