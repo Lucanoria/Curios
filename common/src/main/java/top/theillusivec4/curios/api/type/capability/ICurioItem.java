@@ -35,6 +35,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
+import org.jetbrains.annotations.ApiStatus;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio.DropRule;
 import top.theillusivec4.curios.platform.Services;
@@ -273,7 +274,26 @@ public interface ICurioItem
      */
     @Nonnull
     default DropRule getDropRule(SlotContext slotContext, DamageSource source, boolean recentlyHit, ItemStack stack) {
-        return defaultInstance.getDropRule(slotContext, source, recentlyHit);
+        return getDropRule(slotContext, source, 0, recentlyHit, stack);
+    }
+
+    /**
+     * @deprecated See {@link ICurioItem#getDropRule(SlotContext, DamageSource, boolean, ItemStack)},
+     * Determines if the ItemStack should drop on death and persist through respawn. This will persist
+     * the ItemStack in the curio slot to the respawned player if applicable.
+     *
+     * @param slotContext  Context about the slot that the ItemStack is attempting to equip into
+     * @param source       The damage source that killed the wearer and triggered the drop
+     * @param lootingLevel The level of looting that triggered the drop
+     * @param recentlyHit  Whether the wearer was recently hit
+     * @param stack        The ItemStack in question
+     * @return The {@link DropRule} that applies to this curio
+     */
+    @Deprecated(forRemoval = true, since = "1.21.1")
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.22")
+    @Nonnull
+    default DropRule getDropRule(SlotContext slotContext, DamageSource source, int lootingLevel, boolean recentlyHit, ItemStack stack) {
+        return defaultInstance.getDropRule(slotContext, source, lootingLevel, recentlyHit);
     }
 
     /**

@@ -32,6 +32,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -40,6 +41,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.ApiStatus;
@@ -250,6 +252,24 @@ public interface ICurio
      */
     @Nonnull
     default DropRule getDropRule(SlotContext slotContext, DamageSource source, boolean recentlyHit) {
+        return getDropRule(slotContext, source, 0, recentlyHit);
+    }
+
+    /**
+     * @deprecated See {@link ICurio#getDropRule(SlotContext, DamageSource, boolean)},
+     * Determines if the ItemStack should drop on death and persist through respawn. This will persist
+     * the ItemStack in the curio slot to the respawned player if applicable.
+     *
+     * @param slotContext  Context about the slot that the ItemStack is attempting to equip into
+     * @param source       The damage source that killed the wearer and triggered the drop
+     * @param lootingLevel The level of looting that triggered the drop
+     * @param recentlyHit  Whether or not the wearer was recently hit
+     * @return The {@link DropRule} that applies to this curio
+     */
+    @Deprecated(forRemoval = true, since = "1.21.1")
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.22")
+    @Nonnull
+    default DropRule getDropRule(SlotContext slotContext, DamageSource source, int lootingLevel, boolean recentlyHit) {
         return DropRule.DEFAULT;
     }
 

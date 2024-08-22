@@ -72,6 +72,10 @@ dependencies {
 
     implementation "curse.maven:octo-lib-916747:5447735"
     implementation "curse.maven:relics-mod-445274:5532603"
+    implementation "curse.maven:caelus-308989:5442975"
+    implementation "curse.maven:geckolib-388172:5605715"
+    implementation "curse.maven:irons-spells-n-spellbooks-855414:5618912"
+    implementation "curse.maven:ars-nouveau-401955:5638541"
     implementation "curse.maven:emi-580555:5609618"
 }
 

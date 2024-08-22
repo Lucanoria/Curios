@@ -32,24 +32,5 @@ import org.jetbrains.annotations.ApiStatus;
  * @param cosmetic   True if the slot is cosmetic, false if the slot is functional
  * @param visible    True if the slot can render its item on the wearer, false if not
  */
-public record SlotContext(String identifier, LivingEntity entity, int index, boolean cosmetic,
-                          boolean visible) {
-
-  @Deprecated(forRemoval = true)
-  @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
-  public String getIdentifier() {
-    return identifier;
-  }
-
-  @Deprecated(forRemoval = true)
-  @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
-  public int getIndex() {
-    return index;
-  }
-
-  @Deprecated(forRemoval = true)
-  @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
-  public LivingEntity getWearer() {
-    return entity;
-  }
+public record SlotContext(String identifier, LivingEntity entity, int index, boolean cosmetic, boolean visible) {
 }
