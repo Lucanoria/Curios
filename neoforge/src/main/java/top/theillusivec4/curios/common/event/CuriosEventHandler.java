@@ -94,7 +94,6 @@ import top.theillusivec4.curios.common.network.server.sync.SPacketSyncStack;
 import top.theillusivec4.curios.common.network.server.sync.SPacketSyncStack.HandlerType;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 public class CuriosEventHandler

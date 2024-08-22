@@ -259,8 +259,7 @@ public class CuriosScreen extends AbstractContainerScreen<CuriosContainer>
     if (this.recipeBookGui.isVisible() && this.widthTooNarrow) {
       this.recipeBookGui.toggleVisibility();
       return true;
-    } else if (KeyRegistry.openCurios
-        .isActiveAndMatches(InputConstants.getKey(p_keyPressed_1_, p_keyPressed_2_))) {
+    } else if (KeyRegistry.openCurios.isActiveAndMatches(InputConstants.getKey(p_keyPressed_1_, p_keyPressed_2_))) {
       LocalPlayer playerEntity = this.getMinecraft().player;
 
       if (playerEntity != null) {
