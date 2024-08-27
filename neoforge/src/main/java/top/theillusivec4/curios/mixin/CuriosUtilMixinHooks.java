@@ -44,6 +44,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.apache.commons.lang3.ArrayUtils;
+import top.theillusivec4.curios.Curios;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -173,9 +174,8 @@ public class CuriosUtilMixinHooks {
   }
 
   public static boolean containsStack(Player player, ItemStack stack) {
-    String cacheKey = BuiltInRegistries.ITEM.getKey(stack.getItem()).toString() + (!stack.getComponents().isEmpty() ? stack.getComponents().stream().map(TypedDataComponent::toString).reduce((s, s2) -> s + s2) : "");
     return CuriosApi.getCuriosInventory(player).map(
-            inv -> inv.findFirstCurio(stack2 -> !stack2.isEmpty() && ItemStack.isSameItemSameComponents(stack, stack2), cacheKey).isPresent())
+            inv -> inv.findFirstCurio(stack2 -> !stack2.isEmpty() && ItemStack.isSameItemSameComponents(stack, stack2), Curios.itemCacheKey(stack)).isPresent())
         .orElse(false);
   }
 

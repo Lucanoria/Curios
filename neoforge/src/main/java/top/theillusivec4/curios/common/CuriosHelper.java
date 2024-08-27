@@ -20,7 +20,6 @@
 
 package top.theillusivec4.curios.common;
 
-import com.google.common.collect.Multimap;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,6 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotAttribute;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.SlotResult;
 import top.theillusivec4.curios.api.type.capability.ICurio;
@@ -86,10 +84,8 @@ public class CuriosHelper implements ICuriosHelper {
   }
 
   @Override
-  public Optional<SlotResult> findFirstCurio(@Nonnull LivingEntity livingEntity,
-                                             Predicate<ItemStack> filter) {
-    return CuriosApi.getCuriosInventory(livingEntity).map(inv -> inv.findFirstCurio(filter))
-        .orElse(Optional.empty());
+  public Optional<SlotResult> findFirstCurio(@Nonnull LivingEntity livingEntity, Predicate<ItemStack> filter) {
+    return CuriosApi.getCuriosInventory(livingEntity).map(inv -> inv.findFirstCurio(filter)).orElse(Optional.empty());
   }
 
   @Override

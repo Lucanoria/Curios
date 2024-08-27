@@ -49,6 +49,7 @@ import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
+import top.theillusivec4.curios.Curios;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotAttribute;
 import top.theillusivec4.curios.api.SlotContext;
@@ -137,7 +138,7 @@ public class CurioInventoryCapability implements ICuriosItemHandler
 
     @Override
     public Optional<SlotResult> findFirstCurio(Item item) {
-        return findFirstCurio(stack -> stack.getItem() == item);
+        return findFirstCurio(stack -> stack.getItem() == item, Curios.itemCacheKey(item.getDefaultInstance()));
     }
 
     @Override
@@ -182,11 +183,28 @@ public class CurioInventoryCapability implements ICuriosItemHandler
 
     @Override
     public List<SlotResult> findCurios(Item item) {
-        return findCurios(stack -> stack.getItem() == item);
+        return findCurios(stack -> stack.getItem() == item, Curios.itemCacheKey(item.getDefaultInstance()));
     }
 
     @Override
     public List<SlotResult> findCurios(Predicate<ItemStack> filter) {
+        return findCurios(filter, "");
+    }
+
+    static Map<String, Pair<Long, List<SlotResult>>> findCuriosCache = new HashMap<>();
+    public List<SlotResult> findCurios(Predicate<ItemStack> filter, String cacheKey) {
+        // Check cached value first
+        long gameTime = this.livingEntity.level().getGameTime();
+        if (!cacheKey.isEmpty()) {
+            if (findCuriosCache.size() > 500) findCuriosCache.clear();
+            if (findCuriosCache.containsKey(cacheKey)) {
+                var pair = findCuriosCache.get(cacheKey);
+                if (pair.getFirst() == gameTime) {
+                    return pair.getSecond();
+                }
+            }
+        }
+
         List<SlotResult> result = new ArrayList<>();
         Map<String, ICurioStacksHandler> curios = this.getCurios();
 
@@ -203,6 +221,7 @@ public class CurioInventoryCapability implements ICuriosItemHandler
                 }
             }
         }
+        findCuriosCache.put(cacheKey, Pair.of(gameTime, result));
         return result;
     }
 
