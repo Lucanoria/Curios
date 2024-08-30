@@ -131,8 +131,7 @@ public class CuriosScreen extends AbstractContainerScreen<CuriosContainer>
 
       if (!this.menu.player.isCreative()) {
         this.recipeBookButton =
-            new ImageButton(this.leftPos + 104, this.height / 2 - 22, 20, 18,
-                RecipeBookComponent.RECIPE_BUTTON_SPRITES, (button) -> {
+            new ImageButton(this.leftPos + 104, this.height / 2 - 22, 20, 18, RecipeBookComponent.RECIPE_BUTTON_SPRITES, (button) -> {
               this.recipeBookGui.toggleVisibility();
               button.setPosition(this.leftPos + 104, this.height / 2 - 22);
               this.buttonCurios.setPosition(this.leftPos + offsets.getA() + 2,

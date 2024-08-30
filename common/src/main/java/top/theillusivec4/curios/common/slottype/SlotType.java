@@ -294,8 +294,7 @@ public final class SlotType implements ISlotType {
     }
 
     public Builder hasCosmetic(boolean hasCosmetic, boolean replace) {
-      this.hasCosmetic =
-          replace || this.hasCosmetic == null ? hasCosmetic : this.hasCosmetic || hasCosmetic;
+      this.hasCosmetic = replace || this.hasCosmetic == null ? hasCosmetic : this.hasCosmetic || hasCosmetic;
       return this;
     }
 

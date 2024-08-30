@@ -91,8 +91,7 @@ public class CuriosSlotManager extends SimpleJsonResourceReloadListener {
           namespace -> packResources.listResources(PackType.SERVER_DATA, namespace, "curios/slots",
               (resourceLocation, inputStreamIoSupplier) -> {
                 String path = resourceLocation.getPath();
-                ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(namespace,
-                    path.substring("curios/slots/".length(), path.length() - ".json".length()));
+                ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(namespace, path.substring("curios/slots/".length(), path.length() - ".json".length()));
 
                 JsonElement el = pObject.get(rl);
                 if (el != null) {
@@ -105,19 +104,15 @@ public class CuriosSlotManager extends SimpleJsonResourceReloadListener {
       ResourceLocation resourcelocation = entry.getKey();
 
       if (resourcelocation.getNamespace().equals("curios")) {
-
         try {
           String id = resourcelocation.getPath();
 
           if (!ICondition.conditionsMatched(JsonOps.INSTANCE, entry.getValue().getAsJsonObject())) {
-            CuriosConstants.LOG.debug("Skipping loading slot {} as its conditions were not met",
-                resourcelocation);
+            CuriosConstants.LOG.debug("Skipping loading slot {} as its conditions were not met", resourcelocation);
             continue;
           }
-          fromJson(map.computeIfAbsent(id, (k) -> new SlotType.Builder(id)),
-              GsonHelper.convertToJsonObject(entry.getValue(), "top element"));
-          modMap.computeIfAbsent(id, (k) -> ImmutableSet.builder())
-              .add(resourcelocation.getNamespace());
+          fromJson(map.computeIfAbsent(id, (k) -> new SlotType.Builder(id)), GsonHelper.convertToJsonObject(entry.getValue(), "top element"));
+          modMap.computeIfAbsent(id, (k) -> ImmutableSet.builder()).add(resourcelocation.getNamespace());
         } catch (IllegalArgumentException | JsonParseException e) {
           CuriosConstants.LOG.error("Parsing error loading curio slot {}", resourcelocation, e);
         }
@@ -125,6 +120,7 @@ public class CuriosSlotManager extends SimpleJsonResourceReloadListener {
     }
 
     // Legacy IMC slot registrations
+    // TODO remove in 1.22
     for (Map.Entry<String, SlotType.Builder> entry : LegacySlotManager.getImcBuilders()
         .entrySet()) {
       SlotType.Builder builder =
@@ -132,17 +128,14 @@ public class CuriosSlotManager extends SimpleJsonResourceReloadListener {
       builder.apply(entry.getValue());
     }
 
-    for (Map.Entry<String, Set<String>> entry : LegacySlotManager.getIdsToMods()
-        .entrySet()) {
-      modMap.computeIfAbsent(entry.getKey(), (k) -> ImmutableSet.builder())
-          .addAll(entry.getValue());
+    for (Map.Entry<String, Set<String>> entry : LegacySlotManager.getIdsToMods().entrySet()) {
+      modMap.computeIfAbsent(entry.getKey(), (k) -> ImmutableSet.builder()).addAll(entry.getValue());
     }
 
     for (Map.Entry<ResourceLocation, JsonElement> entry : sorted.entrySet()) {
       ResourceLocation resourcelocation = entry.getKey();
 
-      if (resourcelocation.getPath().startsWith("_") ||
-          resourcelocation.getNamespace().equals("curios")) {
+      if (resourcelocation.getPath().startsWith("_") || resourcelocation.getNamespace().equals("curios")) {
         continue;
       }
 
@@ -150,14 +143,11 @@ public class CuriosSlotManager extends SimpleJsonResourceReloadListener {
         String id = resourcelocation.getPath();
 
         if (!ICondition.conditionsMatched(JsonOps.INSTANCE, entry.getValue().getAsJsonObject())) {
-          CuriosConstants.LOG.debug("Skipping loading slot {} as its conditions were not met",
-              resourcelocation);
+          CuriosConstants.LOG.debug("Skipping loading slot {} as its conditions were not met", resourcelocation);
           continue;
         }
-        fromJson(map.computeIfAbsent(id, (k) -> new SlotType.Builder(id)),
-            GsonHelper.convertToJsonObject(entry.getValue(), "top element"));
-        modMap.computeIfAbsent(id, (k) -> ImmutableSet.builder())
-            .add(resourcelocation.getNamespace());
+        fromJson(map.computeIfAbsent(id, (k) -> new SlotType.Builder(id)), GsonHelper.convertToJsonObject(entry.getValue(), "top element"));
+        modMap.computeIfAbsent(id, (k) -> ImmutableSet.builder()).add(resourcelocation.getNamespace());
       } catch (IllegalArgumentException | JsonParseException e) {
         CuriosConstants.LOG.error("Parsing error loading curio slot {}", resourcelocation, e);
       }
@@ -317,6 +307,7 @@ public class CuriosSlotManager extends SimpleJsonResourceReloadListener {
     return results;
   }
 
+  // TODO use codec
   public static void fromJson(SlotType.Builder builder, JsonObject jsonObject)
       throws IllegalArgumentException, JsonParseException {
     Integer jsonSize = jsonObject.has("size") ? GsonHelper.getAsInt(jsonObject, "size") : null;

@@ -70,13 +70,19 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 
-    implementation "curse.maven:octo-lib-916747:5447735"
-    implementation "curse.maven:relics-mod-445274:5532603"
+    implementation "curse.maven:architectury-api-419699:5553800"
+    implementation "curse.maven:octo-lib-916747:5615155"
+    implementation "curse.maven:relics-mod-445274:5655840"
     implementation "curse.maven:caelus-308989:5442975"
     implementation "curse.maven:geckolib-388172:5605715"
     implementation "curse.maven:irons-spells-n-spellbooks-855414:5618912"
     implementation "curse.maven:ars-nouveau-401955:5638541"
     implementation "curse.maven:emi-580555:5609618"
+    implementation "curse.maven:balm-531761:5676524"
+    implementation "curse.maven:crafting-tweaks-233071:5644056"
+    implementation "curse.maven:placebo-283644:5626449"
+    implementation "curse.maven:fastworkbench-288885:5670423"
+    implementation "curse.maven:notenoughrecipebook-738663:5632777"
 }
 
 idea {
