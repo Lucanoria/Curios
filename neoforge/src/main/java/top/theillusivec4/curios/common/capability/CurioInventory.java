@@ -99,12 +99,10 @@ public class CurioInventory implements INBTSerializable<CompoundTag>
                     newStacksHandler.copyModifiers(prevStacksHandler);
                     int index = 0;
 
-                    while (index < newStacksHandler.getSlots() && index < prevStacksHandler
-                            .getSlots()) {
+                    while (index < newStacksHandler.getSlots() && index < prevStacksHandler.getSlots()) {
                         ItemStack prevStack = prevStacksHandler.getStacks().getStackInSlot(index);
 
                         if (!prevStack.isEmpty()) {
-
                             if (newStacksHandler.getStacks().isItemValid(index, prevStack)) {
                                 newStacksHandler.getStacks().setStackInSlot(index, prevStack);
                             } else {
@@ -114,10 +112,8 @@ public class CurioInventory implements INBTSerializable<CompoundTag>
                         ItemStack prevCosmetic = prevStacksHandler.getCosmeticStacks().getStackInSlot(index);
 
                         if (!prevCosmetic.isEmpty()) {
-
                             if (newStacksHandler.getStacks().isItemValid(index, prevCosmetic)) {
-                                newStacksHandler.getCosmeticStacks().setStackInSlot(index,
-                                        prevStacksHandler.getCosmeticStacks().getStackInSlot(index));
+                                newStacksHandler.getCosmeticStacks().setStackInSlot(index, prevStacksHandler.getCosmeticStacks().getStackInSlot(index));
                             } else {
                                 this.curiosItemHandler.loseInvalidStack(prevCosmetic);
                             }
@@ -126,18 +122,13 @@ public class CurioInventory implements INBTSerializable<CompoundTag>
                     }
 
                     while (index < prevStacksHandler.getSlots()) {
-                        this.curiosItemHandler.loseInvalidStack(
-                                prevStacksHandler.getStacks().getStackInSlot(index));
-                        this.curiosItemHandler.loseInvalidStack(
-                                prevStacksHandler.getCosmeticStacks().getStackInSlot(index));
+                        this.curiosItemHandler.loseInvalidStack(prevStacksHandler.getStacks().getStackInSlot(index));
+                        this.curiosItemHandler.loseInvalidStack(prevStacksHandler.getCosmeticStacks().getStackInSlot(index));
                         index++;
                     }
                     sortedCurios.put(slotType, newStacksHandler);
 
-                    for (int j = 0;
-                         j < newStacksHandler.getRenders().size() &&
-                                 j < prevStacksHandler.getRenders()
-                                         .size(); j++) {
+                    for (int j = 0; j < newStacksHandler.getRenders().size() && j < prevStacksHandler.getRenders().size(); j++) {
                         newStacksHandler.getRenders().set(j, prevStacksHandler.getRenders().get(j));
                     }
                 });
@@ -161,8 +152,7 @@ public class CurioInventory implements INBTSerializable<CompoundTag>
                     }
                 }
             }
-            sortedCurios.forEach(
-                    (slotType, stacksHandler) -> curios.put(slotType.getIdentifier(), stacksHandler));
+            sortedCurios.forEach((slotType, stacksHandler) -> curios.put(slotType.getIdentifier(), stacksHandler));
             this.curios.putAll(curios);
             this.deserialized = new CompoundTag();
             this.markDeserialized = false;

@@ -92,8 +92,7 @@ public class MixinCuriosApi {
   }
 
   @Inject(at = @At("HEAD"), method = "isStackValid", cancellable = true)
-  private static void curios$isStackValid(SlotContext slotContext, ItemStack stack,
-                                          CallbackInfoReturnable<Boolean> cir) {
+  private static void curios$isStackValid(SlotContext slotContext, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
     cir.setReturnValue(CuriosImplMixinHooks.isStackValid(slotContext, stack));
   }
 
