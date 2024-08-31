@@ -520,6 +520,7 @@ public class CurioStacksHandler implements ICurioStacksHandler {
           AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)) {
         size *= mod.amount();
       }
+      size = Math.max(0, size);
 
       if (size != this.getSlots()) {
         this.resize((int) size);
