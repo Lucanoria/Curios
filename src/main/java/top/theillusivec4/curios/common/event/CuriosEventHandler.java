@@ -625,15 +625,18 @@ public class CuriosEventHandler {
                   true, HandlerType.COSMETIC);
               cosmeticStackHandler.setPreviousStackInSlot(index, cosmeticStack.copy());
             }
-            Set<ICurioStacksHandler> updates = handler.getUpdatingInventories();
-
-            if (!updates.isEmpty()) {
-              NetworkHandler.INSTANCE.send(
-                  PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> livingEntity),
-                  new SPacketSyncModifiers(livingEntity.getId(), updates));
-              updates.clear();
-            }
           }
+        }
+      }
+
+      if (!livingEntity.level().isClientSide()) {
+        Set<ICurioStacksHandler> updates = handler.getUpdatingInventories();
+
+        if (!updates.isEmpty()) {
+          NetworkHandler.INSTANCE.send(
+              PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> livingEntity),
+              new SPacketSyncModifiers(livingEntity.getId(), updates));
+          updates.clear();
         }
       }
     });
