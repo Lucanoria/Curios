@@ -571,7 +571,7 @@ public class CuriosEventHandler {
                                         AttributeInstance attInst = attributeMap.getInstance(key);
 
                                         if (attInst != null) {
-                                            attInst.addTransientModifier(value);
+                                            attInst.addOrUpdateTransientModifier(value);
                                         }
                                     });
                                     handler.addTransientSlotModifiers(slots);
