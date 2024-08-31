@@ -37,6 +37,7 @@ import java.util.function.Predicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -208,7 +209,17 @@ public class CuriosEventHandler {
             new SPacketSyncData(CuriosSlotManager.getSyncPacket(),
                 CuriosEntityManager.getSyncPacket()));
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
-          handler.readTag(handler.writeTag());
+          Tag tag = handler.writeTag();
+
+          for (Map.Entry<String, ICurioStacksHandler> entry : handler.getCurios().entrySet()) {
+            ICurioStacksHandler stacks = entry.getValue();
+
+            for (int i = 0; i < stacks.getSlots(); i++) {
+              stacks.getStacks().setStackInSlot(i, ItemStack.EMPTY);
+              stacks.getCosmeticStacks().setStackInSlot(i, ItemStack.EMPTY);
+            }
+          }
+          handler.readTag(tag);
           PacketDistributor.sendToPlayersTrackingEntityAndSelf(player,
               new SPacketSyncCurios(player.getId(), handler.getCurios()));
 
@@ -225,9 +236,18 @@ public class CuriosEventHandler {
       ServerPlayer mp = evt.getPlayer();
       PacketDistributor.sendToPlayer(mp, new SPacketSyncData(CuriosSlotManager.getSyncPacket(),
           CuriosEntityManager.getSyncPacket()));
-      CuriosApi.getCuriosInventory(mp).ifPresent(
-          handler -> {
-            handler.readTag(handler.writeTag());
+      CuriosApi.getCuriosInventory(mp).ifPresent(handler -> {
+            Tag tag = handler.writeTag();
+
+            for (Map.Entry<String, ICurioStacksHandler> entry : handler.getCurios().entrySet()) {
+              ICurioStacksHandler stacks = entry.getValue();
+
+              for (int i = 0; i < stacks.getSlots(); i++) {
+                stacks.getStacks().setStackInSlot(i, ItemStack.EMPTY);
+                stacks.getCosmeticStacks().setStackInSlot(i, ItemStack.EMPTY);
+              }
+            }
+            handler.readTag(tag);
             PacketDistributor.sendToPlayer(mp,
                 new SPacketSyncCurios(mp.getId(), handler.getCurios()));
 
@@ -247,7 +267,19 @@ public class CuriosEventHandler {
     Entity entity = evt.getEntity();
 
     if (entity instanceof LivingEntity livingEntity) {
-      CuriosApi.getCuriosInventory(livingEntity).ifPresent(inv -> inv.readTag(inv.writeTag()));
+      CuriosApi.getCuriosInventory(livingEntity).ifPresent(inv -> {
+        Tag tag = inv.writeTag();
+
+        for (Map.Entry<String, ICurioStacksHandler> entry : inv.getCurios().entrySet()) {
+          ICurioStacksHandler stacks = entry.getValue();
+
+          for (int i = 0; i < stacks.getSlots(); i++) {
+            stacks.getStacks().setStackInSlot(i, ItemStack.EMPTY);
+            stacks.getCosmeticStacks().setStackInSlot(i, ItemStack.EMPTY);
+          }
+        }
+        inv.readTag(tag);
+      });
     }
   }
 
@@ -406,40 +438,6 @@ public class CuriosEventHandler {
             evt.setCanceled(true);
           }
         }));
-  }
-
-  @SubscribeEvent
-  public void worldTick(LevelTickEvent.Post evt) {
-
-    if (evt.getLevel() instanceof ServerLevel && dirtyTags) {
-      PlayerList list = ((ServerLevel) evt.getLevel()).getServer().getPlayerList();
-
-      for (ServerPlayer player : list.getPlayers()) {
-        CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
-
-          for (Map.Entry<String, ICurioStacksHandler> entry : handler.getCurios().entrySet()) {
-            ICurioStacksHandler stacksHandler = entry.getValue();
-            IDynamicStackHandler stacks = stacksHandler.getStacks();
-            IDynamicStackHandler cosmeticStacks = stacksHandler.getCosmeticStacks();
-            replaceInvalidStacks(player, stacks);
-            replaceInvalidStacks(player, cosmeticStacks);
-          }
-        });
-      }
-      dirtyTags = false;
-    }
-  }
-
-  private static void replaceInvalidStacks(ServerPlayer player, IDynamicStackHandler stacks) {
-
-    for (int i = 0; i < stacks.getSlots(); i++) {
-      ItemStack stack = stacks.getStackInSlot(i);
-
-      if (!stack.isEmpty() && !stacks.isItemValid(i, stack)) {
-        stacks.setStackInSlot(i, ItemStack.EMPTY);
-        ItemHandlerHelper.giveItemToPlayer(player, stack);
-      }
-    }
   }
 
   @SubscribeEvent
