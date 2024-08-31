@@ -2,8 +2,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/TheIllusiveC4/Curios/blob/1.20.6/CHANGELOG.md).
 
-## [8.0.1+1.20.6] - 2024.06.18
-### Changed
-- Slot names without a localization will default to its identifier instead of its localization key
+## [8.0.2+1.20.6] - 2024.08.31
 ### Fixed
-- [Forge] Fixed items disappearing from Curios inventory upon relogging when placed in slot indices after the first [#422](https://github.com/TheIllusiveC4/Curios/issues/422)
+- [NeoForge] Fixed erroneous data resources being added
+- [NeoForge] Fixed potential recursive loop in Curios inventory
+- Fixed slot resizing crash
+- Fixed certain valid items being marked as invalid during loading and datapack reloading
+- Fixed slot modifiers not being synced when the new inventory size is 0
+- Fixed attribute modifier collisions
