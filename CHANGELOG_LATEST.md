@@ -3,8 +3,12 @@ Prior to version 5.2.0, this project used [Forge Recommended Versioning](https:/
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/TheIllusiveC4/Curios/blob/1.20.x/docs/CHANGELOG.md).
 
-## [5.9.1+1.20.1] - 2024.05.23
+## [5.10.0+1.20.1] - 2024.08.31
+### Added
+- [API] Added `CuriosTooltip` helper class to build Curios-style tooltips
 ### Changed
-- Updated cosmetic slot texture for new GUI
+- Slot names without a localization will default to its identifier instead of its localization key
 ### Fixed
-- Fixed crash with JEI integration [#412](https://github.com/TheIllusiveC4/Curios/issues/412)
+- Fixed slot resizing crash
+- Fixed certain valid items being marked as invalid during loading and datapack reloading
+- Fixed slot modifiers not being synced when the new inventory size is 0
