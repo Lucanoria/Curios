@@ -5,10 +5,10 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle' version '[6.0.13, 6.2)'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'com.modrinth.minotaur' version '2.+'
-    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id 'org.spongepowered.mixin' version '0.7.+'
     id 'net.darkhax.curseforgegradle' version '1.+'
 }
 
@@ -82,7 +82,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft "net.neoforged:forge:${version_forge}"
+    minecraft "net.minecraftforge:forge:${version_forge}"
 
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 
