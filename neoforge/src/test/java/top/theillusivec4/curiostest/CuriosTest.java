@@ -92,8 +92,7 @@ public class CuriosTest {
     eventBus.addListener(this::registerCaps);
     eventBus.addListener(this::gatherData);
     NeoForge.EVENT_BUS.addListener(this::attributeModifier);
-    CuriosApi.registerCurioPredicate(ResourceLocation.fromNamespaceAndPath(MODID, "test"),
-        slotResult -> slotResult.stack().getItem() == Items.OAK_BOAT);
+    CuriosApi.registerCurioPredicate(ResourceLocation.fromNamespaceAndPath(MODID, "test"), slotResult -> slotResult.stack().getItem() == Items.OAK_BOAT);
   }
 
   private void gatherData(final GatherDataEvent evt) {
@@ -248,8 +247,7 @@ public class CuriosTest {
   }
 
   private void enqueue(final InterModEnqueueEvent evt) {
-    InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE,
-        () -> new SlotTypeMessage.Builder("legacy").build());
+    InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("legacy").build());
   }
 
   private void clientSetup(final FMLClientSetupEvent evt) {

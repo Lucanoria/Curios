@@ -30,7 +30,8 @@ repositories {
 
 ```
 dependencies {
-    implementation "curse.maven:adorned-1036809:${file_id}"
+    runtimeOnly "curse.maven:adorned-1036809:${file_id}"
+    compileOnly "curse.maven:adorned-1036809:${file_id}"
 }
 ```
 
