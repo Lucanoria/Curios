@@ -22,13 +22,17 @@ package top.theillusivec4.curios.common.event;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+
+import java.util.*;
+import java.util.function.Predicate;
+
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.util.Mth;
@@ -49,7 +53,6 @@ import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -64,10 +67,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerXpEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
-import net.neoforged.neoforge.event.tick.LevelTickEvent;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.network.PacketDistributor;
-import top.theillusivec4.curios.CuriosConstants;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotAttribute;
 import top.theillusivec4.curios.api.SlotContext;
@@ -93,11 +93,9 @@ import top.theillusivec4.curios.common.network.server.sync.SPacketSyncModifiers;
 import top.theillusivec4.curios.common.network.server.sync.SPacketSyncStack;
 import top.theillusivec4.curios.common.network.server.sync.SPacketSyncStack.HandlerType;
 
-import java.util.*;
-import java.util.function.Predicate;
-
 public class CuriosEventHandler
 {
+
     public static boolean dirtyTags = false;
 
     private static void handleDrops(String identifier, LivingEntity livingEntity,
@@ -151,7 +149,6 @@ public class CuriosEventHandler
     }
 
     private static boolean handleMending(Player player, IDynamicStackHandler stacks, PlayerXpEvent.PickupXp evt) {
-
         var mendingHolder = player.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.MENDING);
         for (int i = 0; i < stacks.getSlots(); i++) {
             ItemStack stack = stacks.getStackInSlot(i);
@@ -198,7 +195,17 @@ public class CuriosEventHandler
                         new SPacketSyncData(CuriosSlotManager.getSyncPacket(),
                                 CuriosEntityManager.getSyncPacket()));
                 CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
-                    handler.readTag(handler.writeTag());
+                    Tag tag = handler.writeTag();
+
+                    for (Map.Entry<String, ICurioStacksHandler> entry : handler.getCurios().entrySet()) {
+                        ICurioStacksHandler stacks = entry.getValue();
+
+                        for (int i = 0; i < stacks.getSlots(); i++) {
+                            stacks.getStacks().setStackInSlot(i, ItemStack.EMPTY);
+                            stacks.getCosmeticStacks().setStackInSlot(i, ItemStack.EMPTY);
+                        }
+                    }
+                    handler.readTag(tag);
                     PacketDistributor.sendToPlayersTrackingEntityAndSelf(player,
                             new SPacketSyncCurios(player.getId(), handler.getCurios()));
 
@@ -215,16 +222,25 @@ public class CuriosEventHandler
             ServerPlayer mp = evt.getPlayer();
             PacketDistributor.sendToPlayer(mp, new SPacketSyncData(CuriosSlotManager.getSyncPacket(),
                     CuriosEntityManager.getSyncPacket()));
-            CuriosApi.getCuriosInventory(mp).ifPresent(
-                    handler -> {
-                        handler.readTag(handler.writeTag());
-                        PacketDistributor.sendToPlayer(mp,
-                                new SPacketSyncCurios(mp.getId(), handler.getCurios()));
+            CuriosApi.getCuriosInventory(mp).ifPresent(handler -> {
+                Tag tag = handler.writeTag();
 
-                        if (mp.containerMenu instanceof ICuriosMenu curiosContainer) {
-                            curiosContainer.resetSlots();
-                        }
-                    });
+                for (Map.Entry<String, ICurioStacksHandler> entry : handler.getCurios().entrySet()) {
+                    ICurioStacksHandler stacks = entry.getValue();
+
+                    for (int i = 0; i < stacks.getSlots(); i++) {
+                        stacks.getStacks().setStackInSlot(i, ItemStack.EMPTY);
+                        stacks.getCosmeticStacks().setStackInSlot(i, ItemStack.EMPTY);
+                    }
+                }
+                handler.readTag(tag);
+                PacketDistributor.sendToPlayer(mp,
+                        new SPacketSyncCurios(mp.getId(), handler.getCurios()));
+
+                if (mp.containerMenu instanceof ICuriosMenu curiosContainer) {
+                    curiosContainer.resetSlots();
+                }
+            });
             Collection<ISlotType> slotTypes = CuriosApi.getPlayerSlots(mp).values();
             Map<String, ResourceLocation> icons = new HashMap<>();
             slotTypes.forEach(type -> icons.put(type.getIdentifier(), type.getIcon()));
@@ -237,7 +253,19 @@ public class CuriosEventHandler
         Entity entity = evt.getEntity();
 
         if (entity instanceof LivingEntity livingEntity && livingEntity.level() != null) {
-            CuriosApi.getCuriosInventory(livingEntity).ifPresent(inv -> inv.readTag(inv.writeTag()));
+            CuriosApi.getCuriosInventory(livingEntity).ifPresent(inv -> {
+                Tag tag = inv.writeTag();
+
+                for (Map.Entry<String, ICurioStacksHandler> entry : inv.getCurios().entrySet()) {
+                    ICurioStacksHandler stacks = entry.getValue();
+
+                    for (int i = 0; i < stacks.getSlots(); i++) {
+                        stacks.getStacks().setStackInSlot(i, ItemStack.EMPTY);
+                        stacks.getCosmeticStacks().setStackInSlot(i, ItemStack.EMPTY);
+                    }
+                }
+                inv.readTag(tag);
+            });
         }
     }
 
@@ -386,40 +414,6 @@ public class CuriosEventHandler
                 }));
     }
 
-    @SubscribeEvent
-    public void worldTick(LevelTickEvent.Post evt) {
-
-        if (evt.getLevel() instanceof ServerLevel && dirtyTags) {
-            PlayerList list = ((ServerLevel) evt.getLevel()).getServer().getPlayerList();
-
-            for (ServerPlayer player : list.getPlayers()) {
-                CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
-
-                    for (Map.Entry<String, ICurioStacksHandler> entry : handler.getCurios().entrySet()) {
-                        ICurioStacksHandler stacksHandler = entry.getValue();
-                        IDynamicStackHandler stacks = stacksHandler.getStacks();
-                        IDynamicStackHandler cosmeticStacks = stacksHandler.getCosmeticStacks();
-                        replaceInvalidStacks(player, stacks);
-                        replaceInvalidStacks(player, cosmeticStacks);
-                    }
-                });
-            }
-            dirtyTags = false;
-        }
-    }
-
-    private static void replaceInvalidStacks(ServerPlayer player, IDynamicStackHandler stacks) {
-
-        for (int i = 0; i < stacks.getSlots(); i++) {
-            ItemStack stack = stacks.getStackInSlot(i);
-
-            if (!stack.isEmpty() && !stacks.isItemValid(i, stack)) {
-                stacks.setStackInSlot(i, ItemStack.EMPTY);
-                ItemHandlerHelper.giveItemToPlayer(player, stack);
-            }
-        }
-    }
-
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onBreakBlock(BlockDropsEvent evt) {
         if (evt.getDroppedExperience() > 0 && evt.getBreaker() instanceof LivingEntity livingEntity) {
@@ -495,7 +489,6 @@ public class CuriosEventHandler
                         SlotContext slotContext = new SlotContext(identifier, livingEntity, i, false, renderStates.size() > i && renderStates.get(i));
                         ItemStack stack = stackHandler.getStackInSlot(i);
                         Optional<ICurio> currentCurio = CuriosApi.getCurio(stack);
-                        final int index = i;
 
                         if (!stack.isEmpty()) {
                             stack.inventoryTick(livingEntity.level(), livingEntity, -1, false);
@@ -507,7 +500,7 @@ public class CuriosEventHandler
 
                             if (!ItemStack.matches(stack, prevStack)) {
                                 Optional<ICurio> prevCurio = CuriosApi.getCurio(prevStack);
-                                syncCurios(livingEntity, stack, currentCurio, prevCurio, identifier, index, false, renderStates.size() > index && renderStates.get(index), HandlerType.EQUIPMENT);
+                                syncCurios(livingEntity, stack, currentCurio, prevCurio, identifier, i, false, renderStates.size() > i && renderStates.get(i), HandlerType.EQUIPMENT);
                                 NeoForge.EVENT_BUS.post(new CurioChangeEvent(livingEntity, identifier, i, prevStack, stack));
                                 ResourceLocation id = CuriosApi.getSlotId(slotContext);
                                 AttributeMap attributeMap = livingEntity.getAttributes();
@@ -558,10 +551,8 @@ public class CuriosEventHandler
 
                                         if (attInst != null) {
                                             try {
-                                                attInst.addTransientModifier(value);
-                                            } catch (IllegalArgumentException ignored) {
-
-                                            }
+                                                attInst.addOrUpdateTransientModifier(value);
+                                            } catch (IllegalArgumentException ignored) {}
                                         }
                                     });
                                     handler.addTransientSlotModifiers(slots);
@@ -577,16 +568,19 @@ public class CuriosEventHandler
                             ItemStack prevCosmeticStack = cosmeticStackHandler.getPreviousStackInSlot(i);
 
                             if (!ItemStack.matches(cosmeticStack, prevCosmeticStack)) {
-                                syncCurios(livingEntity, cosmeticStack, CuriosApi.getCurio(cosmeticStack), CuriosApi.getCurio(prevCosmeticStack), identifier, index, true, true, HandlerType.COSMETIC);
-                                cosmeticStackHandler.setPreviousStackInSlot(index, cosmeticStack.copy());
-                            }
-                            Set<ICurioStacksHandler> updates = handler.getUpdatingInventories();
-
-                            if (!updates.isEmpty()) {
-                                PacketDistributor.sendToPlayersTrackingEntityAndSelf(livingEntity, new SPacketSyncModifiers(livingEntity.getId(), updates));
-                                updates.clear();
+                                syncCurios(livingEntity, cosmeticStack, CuriosApi.getCurio(cosmeticStack), CuriosApi.getCurio(prevCosmeticStack), identifier, i, true, true, HandlerType.COSMETIC);
+                                cosmeticStackHandler.setPreviousStackInSlot(i, cosmeticStack.copy());
                             }
                         }
+                    }
+                }
+
+                if (!livingEntity.level().isClientSide()) {
+                    Set<ICurioStacksHandler> updates = handler.getUpdatingInventories();
+
+                    if (!updates.isEmpty()) {
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(livingEntity, new SPacketSyncModifiers(livingEntity.getId(), updates));
+                        updates.clear();
                     }
                 }
             });

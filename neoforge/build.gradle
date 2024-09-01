@@ -43,8 +43,6 @@ runs {
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
 repositories {
     maven {
         url "https://www.cursemaven.com"

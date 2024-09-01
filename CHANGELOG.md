@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 Prior to version 5.2.0, this projected used [Forge Recommended Versioning](https://mcforge.readthedocs.io/en/latest/conventions/versioning/).
 
+## [8.0.2+1.20.6] - 2024.08.31
+### Fixed
+- [NeoForge] Fixed erroneous data resources being added
+- [NeoForge] Fixed potential recursive loop in Curios inventory
+- Fixed slot resizing crash
+- Fixed certain valid items being marked as invalid during loading and datapack reloading
+- Fixed slot modifiers not being synced when the new inventory size is 0
+- Fixed attribute modifier collisions
+
+## [8.0.1+1.20.6] - 2024.06.18
+### Changed
+- Slot names without a localization will default to its identifier instead of its localization key
+### Fixed
+- [Forge] Fixed items disappearing from Curios inventory upon relogging when placed in slot indices after the first [#422](https://github.com/TheIllusiveC4/Curios/issues/422)
+
 ## [8.0.0+1.20.6] - 2024.06.13
 ### Added
 - [API] Added `CuriosTooltip` helper class to build Curios-style tooltips
