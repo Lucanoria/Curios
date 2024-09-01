@@ -156,9 +156,6 @@ public class CuriosContainer extends RecipeBookMenu<CraftingInput, CraftingRecip
                 @Override
                 public boolean mayPickup(@Nonnull Player playerIn) {
                     ItemStack itemstack = this.getItem();
-                    if (!itemstack.isEmpty()) {
-                        CuriosConstants.LOG.info("mayPickup " + itemstack + " hasBinding:" + EnchantmentHelper.has(itemstack, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE));
-                    }
                     return (itemstack.isEmpty() || playerIn.isCreative() || !EnchantmentHelper.has(itemstack, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE)) && super.mayPickup(playerIn);
                 }
 

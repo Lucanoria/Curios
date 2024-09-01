@@ -31,6 +31,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import top.theillusivec4.curios.CuriosConstants;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.event.CurioCanEquipEvent;
@@ -92,7 +93,7 @@ public class DynamicStackHandler extends ItemStackHandler implements IDynamicSta
         boolean isCreative = ctx.entity() instanceof Player player && player.isCreative();
 
         if (result == TriState.TRUE ||
-                ((existing.isEmpty() || isCreative || !EnchantmentHelper.has(existing, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) &&
+                ((existing.isEmpty() || isCreative || !EnchantmentHelper.has(existing, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE)) &&
                         CuriosApi.getCurio(existing).map(curio -> curio.canUnequip(ctx)).orElse(true))) {
             return super.extractItem(slot, amount, simulate);
         }
