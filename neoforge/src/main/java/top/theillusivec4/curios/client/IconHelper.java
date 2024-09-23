@@ -20,11 +20,12 @@
 
 package top.theillusivec4.curios.client;
 
-import java.util.HashMap;
-import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.util.IIconHelper;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class IconHelper implements IIconHelper {
 

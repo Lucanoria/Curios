@@ -22,10 +22,6 @@ package top.theillusivec4.curios.common.event;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-
-import java.util.*;
-import java.util.function.Predicate;
-
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
@@ -92,6 +88,9 @@ import top.theillusivec4.curios.common.network.server.sync.SPacketSyncData;
 import top.theillusivec4.curios.common.network.server.sync.SPacketSyncModifiers;
 import top.theillusivec4.curios.common.network.server.sync.SPacketSyncStack;
 import top.theillusivec4.curios.common.network.server.sync.SPacketSyncStack.HandlerType;
+
+import java.util.*;
+import java.util.function.Predicate;
 
 public class CuriosEventHandler
 {

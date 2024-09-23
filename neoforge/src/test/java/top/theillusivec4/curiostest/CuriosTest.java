@@ -218,6 +218,11 @@ public class CuriosTest {
         CuriosApi.addSlotModifier(atts, "ring", id, -1, AttributeModifier.Operation.ADD_VALUE);
         return atts;
       }
+
+      @Override
+      public int getLootingLevel(SlotContext slotContext, @Nullable LootContext lootContext) {
+        return 10;
+      }
     }, CuriosTestRegistry.KNUCKLES.get());
   }
 

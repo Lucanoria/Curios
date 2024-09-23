@@ -22,17 +22,13 @@ package top.theillusivec4.curios.common.data;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import top.theillusivec4.curios.api.type.data.IEntitiesData;
+
+import java.util.*;
 
 public class EntitiesData implements IEntitiesData {
 

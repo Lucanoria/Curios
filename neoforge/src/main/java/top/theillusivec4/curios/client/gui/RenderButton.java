@@ -21,14 +21,13 @@
 package top.theillusivec4.curios.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import javax.annotation.Nonnull;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.resources.ResourceLocation;
 import top.theillusivec4.curios.common.inventory.CurioSlot;
+
+import javax.annotation.Nonnull;
 
 public class RenderButton extends ImageButton {
   public static final WidgetSprites BUTTON_SPRITES = new WidgetSprites(

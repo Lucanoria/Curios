@@ -23,7 +23,6 @@ package top.theillusivec4.curios.api.event;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import java.util.Collection;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -32,6 +31,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.Event;
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.SlotContext;
+
+import java.util.Collection;
 
 /**
  * This event is fired when the attributes for a curio ItemStack are being calculated.

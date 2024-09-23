@@ -20,12 +20,6 @@
 
 package top.theillusivec4.curios.common.network.client;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -49,17 +43,11 @@ import top.theillusivec4.curios.common.data.CuriosEntityManager;
 import top.theillusivec4.curios.common.data.CuriosSlotManager;
 import top.theillusivec4.curios.common.inventory.CurioStacksHandler;
 import top.theillusivec4.curios.common.inventory.container.CuriosContainer;
-import top.theillusivec4.curios.common.network.server.SPacketBreak;
-import top.theillusivec4.curios.common.network.server.SPacketGrabbedItem;
-import top.theillusivec4.curios.common.network.server.SPacketPage;
-import top.theillusivec4.curios.common.network.server.SPacketQuickMove;
-import top.theillusivec4.curios.common.network.server.SPacketSetIcons;
-import top.theillusivec4.curios.common.network.server.sync.SPacketSyncCurios;
-import top.theillusivec4.curios.common.network.server.sync.SPacketSyncData;
-import top.theillusivec4.curios.common.network.server.sync.SPacketSyncModifiers;
-import top.theillusivec4.curios.common.network.server.sync.SPacketSyncRender;
-import top.theillusivec4.curios.common.network.server.sync.SPacketSyncStack;
+import top.theillusivec4.curios.common.network.server.*;
+import top.theillusivec4.curios.common.network.server.sync.*;
 import top.theillusivec4.curios.server.command.CurioArgumentType;
+
+import java.util.*;
 
 public class CuriosClientPackets {
 

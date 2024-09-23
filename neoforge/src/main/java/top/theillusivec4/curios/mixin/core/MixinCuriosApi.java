@@ -21,10 +21,6 @@
 package top.theillusivec4.curios.mixin.core;
 
 import com.google.common.collect.Multimap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -46,6 +42,11 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.mixin.CuriosImplMixinHooks;
+
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
 
 @Mixin(value = CuriosApi.class, remap = false)
 public class MixinCuriosApi {

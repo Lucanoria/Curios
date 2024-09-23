@@ -20,7 +20,6 @@
 
 package top.theillusivec4.curios.common.network.server.sync;
 
-import javax.annotation.Nonnull;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -30,6 +29,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import top.theillusivec4.curios.CuriosConstants;
+
+import javax.annotation.Nonnull;
 
 public class SPacketSyncData implements CustomPacketPayload {
 

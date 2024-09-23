@@ -5,6 +5,7 @@
   "refmap": "curios.refmap.json",
   "mixins": [
     "MixinApplyBonusCount",
+    "MixinEnchantedCountIncreaseFunction",
     "MixinCuriosApi",
     "MixinCuriosDataProvider",
     "MixinInventory",

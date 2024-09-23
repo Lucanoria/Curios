@@ -21,19 +21,13 @@
 package top.theillusivec4.curios.common.slottype;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.stream.Stream;
 import net.neoforged.fml.InterModComms;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
 import top.theillusivec4.curios.common.slottype.SlotType.Builder;
+
+import java.util.*;
+import java.util.stream.Stream;
 
 public class LegacySlotManager {
 

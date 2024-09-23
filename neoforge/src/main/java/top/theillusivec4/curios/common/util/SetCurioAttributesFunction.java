@@ -30,10 +30,6 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.PrimitiveCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
-import javax.annotation.Nonnull;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -54,6 +50,11 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import top.theillusivec4.curios.CuriosConstants;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotAttribute;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 
 public class SetCurioAttributesFunction extends LootItemConditionalFunction {
 

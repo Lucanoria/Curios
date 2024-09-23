@@ -20,7 +20,6 @@
 
 package top.theillusivec4.curios.common.inventory;
 
-import javax.annotation.Nonnull;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
@@ -33,6 +32,8 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 import top.theillusivec4.curios.mixin.core.AccessorEntity;
+
+import javax.annotation.Nonnull;
 
 public class CurioSlot extends SlotItemHandler {
 

@@ -24,10 +24,7 @@ import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.templates.TypeTemplate;
 import com.mojang.datafixers.util.Pair;
-import java.util.Map;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.TypedDataComponent;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -49,6 +46,8 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
+
+import java.util.Map;
 
 public class CuriosUtilMixinHooks {
 
@@ -120,20 +119,21 @@ public class CuriosUtilMixinHooks {
     }).orElse(false);
   }
 
-  public static int getFortuneLevel(Player player) {
-    return CuriosApi.getCuriosInventory(player)
-        .map(handler -> handler.getFortuneLevel(null)).orElse(0);
-  }
-
   public static int getFortuneLevel(LootContext lootContext) {
     Entity entity = lootContext.getParamOrNull(LootContextParams.THIS_ENTITY);
 
     if (entity instanceof LivingEntity livingEntity) {
-      return CuriosApi.getCuriosInventory(livingEntity)
-          .map(handler -> handler.getFortuneLevel(lootContext)).orElse(0);
-    } else {
-      return 0;
+      return CuriosApi.getCuriosInventory(livingEntity).map(handler -> handler.getFortuneLevel(lootContext)).orElse(0);
     }
+    return 0;
+  }
+
+  public static int getLootingLevel(LootContext lootContext) {
+    Entity entity = lootContext.getParamOrNull(LootContextParams.ATTACKING_ENTITY);
+    if (entity instanceof LivingEntity livingEntity) {
+      return CuriosApi.getCuriosInventory(livingEntity).map(handler -> handler.getLootingLevel(lootContext)).orElse(0);
+    }
+    return 0;
   }
 
   public static boolean isFreezeImmune(LivingEntity livingEntity) {

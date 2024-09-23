@@ -20,7 +20,6 @@
 
 package top.theillusivec4.curios.client.gui;
 
-import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -30,6 +29,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 import top.theillusivec4.curios.CuriosConstants;
 import top.theillusivec4.curios.common.network.client.CPacketPage;
+
+import javax.annotation.Nonnull;
 
 public class PageButton extends Button {
   private final CuriosScreen parentGui;

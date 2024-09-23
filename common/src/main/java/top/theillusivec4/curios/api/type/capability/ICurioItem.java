@@ -41,6 +41,7 @@ import top.theillusivec4.curios.api.type.capability.ICurio.DropRule;
 import top.theillusivec4.curios.platform.Services;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
@@ -328,15 +329,12 @@ public interface ICurioItem
      * Default implementation returns level of Looting enchantment on ItemStack.
      *
      * @param slotContext Context about the slot that the ItemStack is in
-     * @param source      Damage source that triggers the looting
-     * @param target      The target that drops the loot
-     * @param baseLooting The original looting level before bonuses
+     * @param lootContext Context about the loot
      * @param stack       The ItemStack in question
      * @return Amount of additional Looting levels that will be applied in LootingLevelEvent
      */
-    default int getLootingLevel(SlotContext slotContext, DamageSource source, LivingEntity target,
-                                int baseLooting, ItemStack stack) {
-        return defaultInstance.getLootingLevel(slotContext, source, target, baseLooting);
+    default int getLootingLevel(SlotContext slotContext, @Nullable LootContext lootContext, ItemStack stack) {
+        return defaultInstance.getLootingLevel(slotContext, lootContext);
     }
 
     /**

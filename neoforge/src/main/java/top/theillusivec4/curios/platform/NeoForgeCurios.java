@@ -20,7 +20,6 @@
 
 package top.theillusivec4.curios.platform;
 
-import java.util.Map;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
@@ -29,6 +28,8 @@ import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.ISlotType;
 import top.theillusivec4.curios.platform.services.ICuriosPlatform;
+
+import java.util.Map;
 
 public class NeoForgeCurios implements ICuriosPlatform {
 

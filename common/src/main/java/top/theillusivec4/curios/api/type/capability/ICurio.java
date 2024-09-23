@@ -45,6 +45,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.ApiStatus;
+import top.theillusivec4.curios.CuriosConstants;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.platform.Services;
 
@@ -303,14 +304,11 @@ public interface ICurio
      * Default implementation returns level of Looting enchantment on ItemStack.
      *
      * @param slotContext Context about the slot that the ItemStack is in
-     * @param source      Damage source that triggers the looting
-     * @param target      The target that drops the loot
-     * @param baseLooting The original looting level before bonuses
+     * @param lootContext Context about the loot
      * @return Amount of additional Looting levels that will be applied in LootingLevelEvent
      */
-    default int getLootingLevel(SlotContext slotContext, DamageSource source, LivingEntity target,
-                                int baseLooting) {
-      var enchantRegistry = slotContext.entity().level().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+    default int getLootingLevel(SlotContext slotContext, @Nullable LootContext lootContext) {
+        var enchantRegistry = slotContext.entity().level().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
         return EnchantmentHelper.getItemEnchantmentLevel(enchantRegistry.getHolderOrThrow(Enchantments.LOOTING), getStack());
     }
 

@@ -22,8 +22,6 @@ package top.theillusivec4.curios.common.network.server;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import java.util.HashSet;
-import java.util.Set;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -44,14 +42,12 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 import top.theillusivec4.curios.common.inventory.container.CuriosContainer;
 import top.theillusivec4.curios.common.inventory.container.CuriosContainerProvider;
-import top.theillusivec4.curios.common.network.client.CPacketDestroy;
-import top.theillusivec4.curios.common.network.client.CPacketOpenCurios;
-import top.theillusivec4.curios.common.network.client.CPacketOpenVanilla;
-import top.theillusivec4.curios.common.network.client.CPacketPage;
-import top.theillusivec4.curios.common.network.client.CPacketToggleCosmetics;
-import top.theillusivec4.curios.common.network.client.CPacketToggleRender;
+import top.theillusivec4.curios.common.network.client.*;
 import top.theillusivec4.curios.common.network.server.sync.SPacketSyncRender;
 import top.theillusivec4.curios.common.network.server.sync.SPacketSyncStack;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class CuriosServerPayloadHandler {
 

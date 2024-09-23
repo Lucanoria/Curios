@@ -21,23 +21,23 @@
 package top.theillusivec4.curios.common.capability;
 
 import com.google.common.collect.Multimap;
-import java.util.List;
-import javax.annotation.Nonnull;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
-import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemizedCurioCapability implements ICurio {
   private final ItemStack stack;
@@ -111,8 +111,8 @@ public class ItemizedCurioCapability implements ICurio {
   }
 
   @Override
-  public int getLootingLevel(SlotContext slotContext, DamageSource source, LivingEntity target, int baseLooting) {
-    return this.curioItem.getLootingLevel(slotContext, source, target, baseLooting, this.getStack());
+  public int getLootingLevel(SlotContext slotContext, @Nullable LootContext lootContext) {
+    return this.curioItem.getLootingLevel(slotContext, lootContext, this.getStack());
   }
 
   @Override
