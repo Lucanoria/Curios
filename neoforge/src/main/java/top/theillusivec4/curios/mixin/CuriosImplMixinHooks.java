@@ -260,8 +260,7 @@ public class CuriosImplMixinHooks {
     private static final Map<String, UUID> UUIDS = new HashMap<>();
 
     public static ResourceLocation getSlotId(SlotContext slotContext) {
-        String key = slotContext.identifier() + slotContext.index();
-        return ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, key);
+        return ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, slotContext.identifier() + slotContext.index());
     }
 
 

@@ -98,7 +98,9 @@ public class ClientEventHandler {
         List<Component> attributesTooltip = new ArrayList<>();
 
         for (String identifier : slots) {
-            Multimap<Holder<Attribute>, AttributeModifier> attributes = CuriosApi.getAttributeModifiers(new SlotContext(identifier, player, 0, false, true), ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, identifier), stack);
+            var slotContext = new SlotContext(identifier, player, 0, false, true);
+
+            Multimap<Holder<Attribute>, AttributeModifier> attributes = CuriosApi.getAttributeModifiers(slotContext, CuriosApi.getSlotId(slotContext), stack);
 
             if (attributes.isEmpty())
                 continue;

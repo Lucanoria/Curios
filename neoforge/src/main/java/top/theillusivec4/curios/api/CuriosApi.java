@@ -384,14 +384,14 @@ public final class CuriosApi {
 
 
     /**
-     * Gets a UUID based on the provided {@link SlotContext}.
+     * Gets a ResourceLocation based on the provided {@link SlotContext}.
      *
      * @param slotContext The SlotContext to base the ResourceLocation on
      * @return The ResourceLocation based on the SlotContext
      */
     public static ResourceLocation getSlotId(SlotContext slotContext) {
         apiError();
-        return ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, slotContext.identifier());
+        return ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, slotContext.identifier() + slotContext.index());
     }
 
     /**
