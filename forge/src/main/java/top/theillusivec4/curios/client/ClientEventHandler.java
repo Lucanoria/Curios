@@ -25,6 +25,8 @@ import static net.minecraft.world.item.component.ItemAttributeModifiers.ATTRIBUT
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.platform.InputConstants;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,6 +39,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -51,6 +54,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.PacketDistributor;
+import top.theillusivec4.curios.CuriosConstants;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotAttribute;
 import top.theillusivec4.curios.api.SlotContext;
@@ -140,6 +144,25 @@ public class ClientEventHandler {
       }
       Map<String, ISlotType> map = player != null ? CuriosApi.getItemStackSlots(stack, player) :
           CuriosApi.getItemStackSlots(stack, FMLLoader.getDist() == Dist.CLIENT);
+      // Remove slots that have curios:all validators to avoid tooltip bloat on every item
+      map = new HashMap<>(map);
+      Set<String> toRemove = new HashSet<>();
+
+      for (ISlotType value : map.values()) {
+
+        for (ResourceLocation validator : value.getValidators()) {
+
+          if (validator.getNamespace().equals(CuriosConstants.MOD_ID) &&
+              validator.getPath().equals("all")) {
+            toRemove.add(value.getIdentifier());
+            break;
+          }
+        }
+      }
+
+      for (String s : toRemove) {
+        map.remove(s);
+      }
       Set<String> curioTags = Set.copyOf(map.keySet());
 
       if (curioTags.contains("curio")) {
