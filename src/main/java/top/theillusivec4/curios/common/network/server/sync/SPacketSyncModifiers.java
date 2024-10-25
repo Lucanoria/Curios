@@ -11,14 +11,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.event.SlotModifiersUpdatedEvent;
 import top.theillusivec4.curios.api.type.ICuriosMenu;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
-import top.theillusivec4.curios.common.inventory.container.CuriosContainer;
+import top.theillusivec4.curios.client.gui.CuriosScreenV2;
 
 public class SPacketSyncModifiers {
 
@@ -67,7 +66,8 @@ public class SPacketSyncModifiers {
 
   public static void handle(SPacketSyncModifiers msg, Supplier<NetworkEvent.Context> ctx) {
     ctx.get().enqueueWork(() -> {
-      ClientLevel world = Minecraft.getInstance().level;
+      Minecraft mc = Minecraft.getInstance();
+      ClientLevel world = mc.level;
 
       if (world != null) {
         Entity entity = world.getEntity(msg.entityId);
@@ -95,6 +95,10 @@ public class SPacketSyncModifiers {
 
                   if (player.containerMenu instanceof ICuriosMenu) {
                     ((ICuriosMenu) player.containerMenu).resetSlots();
+                  }
+
+                  if (mc.screen instanceof CuriosScreenV2 screen) {
+                    screen.updateRenderButtons();
                   }
                 }
               });
