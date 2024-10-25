@@ -25,8 +25,10 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
+import net.minecraft.core.Registry;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -54,6 +56,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.server.command.ModIdArgument;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -88,6 +93,14 @@ public class Curios {
   public static final String MODID = CuriosApi.MODID;
   public static final Logger LOGGER = LogManager.getLogger();
 
+  private static final DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES =
+      DeferredRegister.create(
+          Registry.COMMAND_ARGUMENT_TYPE_REGISTRY, MODID);
+  private static final RegistryObject<SingletonArgumentInfo<CurioArgumentType>> SLOT_ARGUMENT =
+      COMMAND_ARGUMENT_TYPES.register(MODID,
+          () -> ArgumentTypeInfos.registerByClass(CurioArgumentType.class,
+              SingletonArgumentInfo.contextFree(CurioArgumentType::slot)));
+
   public Curios() {
     DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> CuriosClientMod::init);
     CuriosRegistry.init();
@@ -96,6 +109,7 @@ public class Curios {
     eventBus.addListener(this::config);
     eventBus.addListener(this::process);
     eventBus.addListener(this::registerCaps);
+    COMMAND_ARGUMENT_TYPES.register(eventBus);
     MinecraftForge.EVENT_BUS.addListener(this::serverAboutToStart);
     MinecraftForge.EVENT_BUS.addListener(this::serverStopped);
     MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
@@ -109,8 +123,6 @@ public class Curios {
     MinecraftForge.EVENT_BUS.register(new CuriosEventHandler());
     NetworkHandler.register();
     evt.enqueueWork(() -> {
-      ArgumentTypeInfos.registerByClass(CurioArgumentType.class,
-          SingletonArgumentInfo.contextFree(CurioArgumentType::slot));
       CriteriaTriggers.register(EquipCurioTrigger.INSTANCE);
       CuriosSelectorOptions.register();
       SetCurioAttributesFunction.register();
