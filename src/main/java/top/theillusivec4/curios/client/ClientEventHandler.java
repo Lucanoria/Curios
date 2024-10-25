@@ -24,6 +24,8 @@ import static net.minecraft.world.item.ItemStack.ATTRIBUTE_MODIFIER_FORMAT;
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.platform.InputConstants;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +37,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -57,7 +60,6 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.ICuriosMenu;
 import top.theillusivec4.curios.api.type.ISlotType;
 import top.theillusivec4.curios.api.type.capability.ICurio;
-import top.theillusivec4.curios.common.inventory.container.CuriosContainer;
 import top.theillusivec4.curios.common.network.NetworkHandler;
 import top.theillusivec4.curios.common.network.client.CPacketOpenCurios;
 
@@ -149,6 +151,25 @@ public class ClientEventHandler {
 
       Map<String, ISlotType> map = player != null ? CuriosApi.getItemStackSlots(stack, player) :
           CuriosApi.getItemStackSlots(stack, FMLLoader.getDist() == Dist.CLIENT);
+      // Remove slots that have curios:all validators to avoid tooltip bloat on every item
+      map = new HashMap<>(map);
+      Set<String> toRemove = new HashSet<>();
+
+      for (ISlotType value : map.values()) {
+
+        for (ResourceLocation validator : value.getValidators()) {
+
+          if (validator.getNamespace().equals(CuriosApi.MODID) &&
+              validator.getPath().equals("all")) {
+            toRemove.add(value.getIdentifier());
+            break;
+          }
+        }
+      }
+
+      for (String s : toRemove) {
+        map.remove(s);
+      }
       Set<String> curioTags = Set.copyOf(map.keySet());
 
       if (curioTags.contains("curio")) {
