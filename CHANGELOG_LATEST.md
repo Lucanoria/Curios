@@ -2,11 +2,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/TheIllusiveC4/Curios/blob/1.20.6/CHANGELOG.md).
 
-## [8.0.2+1.20.6] - 2024.08.31
+## [8.1.0+1.20.6] - 2024.10.23
+### Added
+- Added `from` expansion additions to the `/curios replace` command [#450](https://github.com/TheIllusiveC4/Curios/issues/450)
+### Changed
+- Slot types that use the `curios:all` validator will no longer be listed on item tooltips
+- Updated `pl_pl` localization [#441](https://github.com/TheIllusiveC4/Curios/pull/441)
 ### Fixed
-- [NeoForge] Fixed erroneous data resources being added
-- [NeoForge] Fixed potential recursive loop in Curios inventory
-- Fixed slot resizing crash
-- Fixed certain valid items being marked as invalid during loading and datapack reloading
-- Fixed slot modifiers not being synced when the new inventory size is 0
-- Fixed attribute modifier collisions
+- Fixed cosmetic toggles not updating positions properly
