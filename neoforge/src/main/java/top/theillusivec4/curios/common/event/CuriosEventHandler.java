@@ -594,14 +594,17 @@ public class CuriosEventHandler {
                                         true, HandlerType.COSMETIC);
                                 cosmeticStackHandler.setPreviousStackInSlot(index, cosmeticStack.copy());
                             }
-                            Set<ICurioStacksHandler> updates = handler.getUpdatingInventories();
-
-                            if (!updates.isEmpty()) {
-                                PacketDistributor.sendToPlayersTrackingEntityAndSelf(livingEntity,
-                                        new SPacketSyncModifiers(livingEntity.getId(), updates));
-                                updates.clear();
-                            }
                         }
+                    }
+                }
+
+                if (!livingEntity.getCommandSenderWorld().isClientSide()) {
+                    Set<ICurioStacksHandler> updates = handler.getUpdatingInventories();
+
+                    if (!updates.isEmpty()) {
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(livingEntity,
+                                new SPacketSyncModifiers(livingEntity.getId(), updates));
+                        updates.clear();
                     }
                 }
             });
