@@ -143,7 +143,8 @@ public class CuriosClientPackets {
     }
 
     public static void handle(final SPacketSyncModifiers data) {
-        ClientLevel world = Minecraft.getInstance().level;
+        var mc = Minecraft.getInstance();
+        ClientLevel world = mc.level;
 
         if (world != null) {
             Entity entity = world.getEntity(data.entityId);
@@ -171,6 +172,10 @@ public class CuriosClientPackets {
 
                                 if (localPlayer.containerMenu instanceof ICuriosMenu curiosMenu) {
                                     curiosMenu.resetSlots();
+                                }
+
+                                if (mc.screen instanceof CuriosScreen screen) {
+                                    screen.updateRenderButtons();
                                 }
                             }
                         });
