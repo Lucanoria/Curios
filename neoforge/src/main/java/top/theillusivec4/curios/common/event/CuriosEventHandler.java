@@ -271,7 +271,6 @@ public class CuriosEventHandler {
     public void playerClone(PlayerEvent.Clone evt) {
         Player player = evt.getEntity();
         Player oldPlayer = evt.getOriginal();
-        oldPlayer.revive();
         Optional<ICuriosItemHandler> oldHandler = CuriosApi.getCuriosInventory(oldPlayer);
         Optional<ICuriosItemHandler> newHandler = CuriosApi.getCuriosInventory(player);
         oldHandler.ifPresent(
